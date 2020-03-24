@@ -2,11 +2,17 @@
 
 ![DeCoronizer Logo](images/decoronizer-logo-128.png?raw=true "Title")
 
-Socially distances you from corona virus and DeCoronize a Website.
+DeCoronize is a Chromeplugin to Socially distances you from corona virus and fix a Website.
 
-## Why
+## Why?
 
-bla
+We don't know why.
+
+If you see any point in this Plugin, please let us know.
+
+## Download
+
+- 
 
 ## Installation
 
@@ -35,8 +41,8 @@ bla
 ## Credits
 
 - felix
-- boris
-- Phillip Kasteck
+- Boris boris.baumann@gmail.com
+- Phillipp Kasteck 
 - marco Nittler
 
 ## License
