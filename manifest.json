@@ -3,7 +3,7 @@
   "version": "19.1",
   "description": "Change Coronawords",
   "default_locale": "de",
-  "permissions": ["activeTab", "declarativeContent", "storage"],
+  "permissions": ["activeTab", "declarativeContent", "storage","tabs","http://*/", "https://*/"],
   "options_page": "options.html",
   "background": {
     "scripts": ["background.js"],

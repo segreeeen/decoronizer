@@ -25,30 +25,42 @@ for (const prop in btns) {
       fetch(url)
           .then((response) => response.json()) //assuming file contains json
           .then((json) => {
+            chrome.storage.local.set({words: json}, function() {
+              console.log('Value is set to ' + json);
+            });
             chrome.extension.getBackgroundPage().console.log(json);
-            changeWord(json);
           });
+      reload();
+
     });
   }
 }
 
-
-function changeWord(word) {
-  chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-    chrome.tabs.executeScript(tabs[0].id, {
-      code:
-        `var findrep = ` + JSON.stringify(word) + `;
-
-        // chrome.extension.getBackgroundPage().console.log('foo');
-
-        findrep.forEach(function(fire) {
-            var highlightedItems = window.document.querySelectorAll("*");
-
-            highlightedItems.forEach(function(item) {
-                let text = item.innerHTML;
-                item.innerHTML = text.replace(new RegExp(fire.f, "ig"), fire.r);
-            });
-        });`
-    });
+function reload() {
+  chrome.tabs.query({ active: true, currentWindow: true }, function(tab) {
+		var code = 'window.location.reload();';
+    chrome.tabs.executeScript(tab.id, {code: code});
   });
 }
+
+
+// function changeWord(word) {
+//   chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+//     chrome.tabs.executeScript(tabs[0].id, {
+//       code:
+//         `
+// 				var findrep = ` + JSON.stringify(word) + `;
+//
+//         // chrome.extension.getBackgroundPage().console.log('foo');
+//
+//         findrep.forEach(function(fire) {
+//             var highlightedItems = window.document.querySelectorAll("*");
+//
+//             highlightedItems.forEach(function(item) {
+//                 let text = item.innerHTML;
+//                 item.innerHTML = text.replace(new RegExp(fire.f, "ig"), fire.r);
+//             });
+//         });`
+//     });
+//   });
+// }
