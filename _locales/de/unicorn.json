@@ -1,10 +1,22 @@
 [
   {
     "f": "Corona",
-    "r": "bla1"
+    "r": "Einhorn"
   },
   {
-    "f": "Corona2",
-    "r": "bla2"
+    "f": "COVID",
+    "r": "HORN"
+  },
+  {
+    "f": "SARS",
+    "r": "GLITZER"
+  },
+  {
+    "f": "CoV",
+    "r": "Horn"
+  },
+  {
+    "f": "Grippe",
+    "r": "Einhorn"
   }
 ]
