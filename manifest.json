@@ -1,0 +1,31 @@
+{
+  "name": "DeCoronizer",
+  "version": "19.1",
+  "description": "Change Coronawords",
+  "default_locale": "de",
+  "permissions": ["activeTab", "declarativeContent", "storage"],
+  "options_page": "options.html",
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "page_action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "images/decoronizer-logo-16.png",
+      "32": "images/decoronizer-logo-32.png",
+      "48": "images/decoronizer-logo-48.png",
+      "128": "images/decoronizer-logo-128.png"
+    }
+  },
+  "icons": {
+    "16": "images/decoronizer-logo-16.png",
+    "32": "images/decoronizer-logo-32.png",
+    "48": "images/decoronizer-logo-48.png",
+    "128": "images/decoronizer-logo-128.png"
+  },
+  "manifest_version": 2,
+  "web_accessible_resources": [
+    "_locales/*"
+  ]
+}
