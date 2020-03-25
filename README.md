@@ -52,7 +52,7 @@ As a special bonus, Twitter becomes utterly useless for you.
 
 ## Credits
 
-- Felix felix@batusic.net
+- Felix fel.batu@gmail.com
 - Boris boris.baumann@gmail.com
 - Phillipp Kasteck 
 - marco Nittler
