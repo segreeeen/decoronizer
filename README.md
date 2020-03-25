@@ -2,7 +2,7 @@
 
 ![DeCoronizer Logo](src/gitstuff/image0.png)
 
-DeCoronize is a Chromeplugin to Socially distances you from corona virus and fix a Website.
+DeCoronize is a Chromeplugin to Socially distances you from Chuck Norris virus and fix a Website.
 
 ## Why?
 
@@ -29,9 +29,7 @@ as of now (almost) all Websites are DeCoronized.
 
 Confused? The Green sign indicate a inactive Plugin and the crossed sign an Active? Welcome to the World of DeCoronizer!
 
-Anyway ... now (almost) all websites will be Decoronized (unfortunately only in your browser). 
-So you miss vitally important messages and a lot of informations are distorted and wrong, just for you. 
-The world outside will turn into a madhouse. The plugin can put your life in danger if you believe the informations.
+Anyway ... and now (almost) all websites will be Decoronized (unfortunately only in your browser). You are distanced from vitally important messages and a lot of informations are distorted and wrong, just for you. The plugin can put your life in danger if you believe the informations - is there really a Coronavirus? Or is it a Bunnyvirus? Who knows?
 
 _BUT_
 
