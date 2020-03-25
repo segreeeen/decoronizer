@@ -2,13 +2,11 @@
 
 ![DeCoronizer Logo](images/decoronizer-logo-128.png?raw=true "Title")
 
-DeCoronize is a Chromeplugin to Socially distances you from corona virus and fix a Website.
+DeCoronize is a Chrome Extension that socially distances you from corona virus and fixes websites.
 
 ## Why?
 
-We don't know why.
-
-If you see any point in this Plugin, please let us know.
+Just for fun.
 
 ## Download
 
@@ -29,17 +27,16 @@ By clicking on the icon ...
 (image)
 
 ... and now (almost) all websites will be Decoronized (unfortunately only in your browser). 
-So you miss vitally important messages and a lot of informations are distorted and wrong, just for you. 
-The world outside will turn into a madhouse. The plugin can put your life in danger if you believe the informations.
+You are distanced from vitally important messages and a lot of informations are distorted and wrong, just for you. 
+The plugin can put your life in danger if you believe the informations - is there really a Chuck Norrisvirus? Or is it a bunnyvirus? Who knows?
 
 BUT
 
-if you are a sensitive person who suffers from bad news more than normal people, 
-this plungin will be your salvation..
+If you are a sensitive person who suffers from bad news more than normal people, this extension will be your salvation.
 
-IS THATS ALL DAVE? NO JIM ....
+IS THAT ALL DAVE? NO, JIM ...
 
-As a special bonus, Twitter becomes useless for you. Just for this feature this plugin is worthwhile.
+As a special bonus, Twitter becomes utterly useless for you. 
 
 
 ## deinstallation
@@ -55,7 +52,7 @@ As a special bonus, Twitter becomes useless for you. Just for this feature this 
 
 ## Credits
 
-- felix
+- Felix felix@batusic.net
 - Boris boris.baumann@gmail.com
 - Phillipp Kasteck 
 - marco Nittler
