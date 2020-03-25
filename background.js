@@ -19,29 +19,32 @@ chrome.runtime.onInstalled.addListener(function () {
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     chrome.storage.local.get(['words'], function (result) {
-        // console.log('Value currently is ' + result.words);
-        chrome.tabs.executeScript(tabId, {
-            code:
-                `
-				var findrep = ` + JSON.stringify(result.words) + `;
+        if (result.words !== "inactive") {
+            console.log('Value currently is ' + result.words);
+            chrome.tabs.executeScript(tabId, {
+                code:
+                `var findrep = ` + JSON.stringify(result.words) + `;
 
                 // chrome.extension.getBackgroundPage().console.log('foo');
-            findrep.forEach(function(fire) {
-                replaceTextNodes(document.getRootNode(), fire);
+                findrep.forEach(function(fire) {
+                    replaceTextNodes(document.getRootNode(), fire);
+                });
+                
+                function replaceTextNodes(node, fire) {
+                    node.childNodes.forEach(function(el) {
+                        if (el.nodeType === 3) {  // If this is a text node, replace the text
+                            if (el.nodeValue.trim() !== "") { // Ignore this node it it an empty text node
+                                let text = el.nodeValue;
+                                el.nodeValue = text.replace(new RegExp(fire.f, "ig"), fire.r);
+                            }
+                        } else { // Else recurse on this node
+                            replaceTextNodes(el, fire);
+                        }
+                    });
+                }`
             });
-
-            function replaceTextNodes(node, fire) {
-            node.childNodes.forEach(function(el) {
-                if (el.nodeType === 3) {  // If this is a text node, replace the text
-                    if (el.nodeValue.trim() !== "") { // Ignore this node it it an empty text node
-                        let text = el.nodeValue;
-                        el.nodeValue = text.replace(new RegExp(fire.f, "ig"), fire.r);
-                    }
-                } else { // Else recurse on this node
-                    replaceTextNodes(el, fire);
-                }
-            });
-            }`
-        });
+        }
     });
 });
+
+
