@@ -1,12 +1,14 @@
 # DeCoronizer
 
-![DeCoronizer Logo](images/decoronizer-logo-128.png?raw=true "Title")
+![DeCoronizer Logo](src/gitstuff/image0.png)
 
-DeCoronizer is a Chrome Extension that socially distances you from corona virus and fixes websites.
+DeCoronize is a Chromeplugin to Socially distances you from corona virus and fix a Website.
 
 ## Why?
 
-Just for fun.
+We don't know why.
+
+If you see any point in this Plugin, please let us know.
 
 ## Download
 
@@ -16,27 +18,29 @@ Just for fun.
 
 After the installation you will have a new icon next to the address bar. 
 
-(image)
+![DeCoronizer Logo](src/gitstuff/image10.png)
 
-By clicking on the icon ...
+By clicking on the icon you can choose the flavour (Kitty, Dogs, Chuck etc.) 
 
-(image )
+![DeCoronizer Logo](src/gitstuff/image20.png)
 
-... you can choose the flavour (Kitty, Dogs, Chuck etc.) 
+The Icon switch to a prohibitory sign to indicate
+as of now (almost) all Websites are DeCoronized.
 
-(image)
+Confused? The Green sign indicate a inactive Plugin and the crossed sign an Active? Welcome to the World of DeCoronizer!
 
-... and now (almost) all websites will be Decoronized (unfortunately only in your browser). 
-You are distanced from vitally important messages and a lot of informations are distorted and wrong, just for you. 
-The plugin can put your life in danger if you believe the informations - is there really a Chuck Norrisvirus? Or is it a bunnyvirus? Who knows?
+Anyway ... now (almost) all websites will be Decoronized (unfortunately only in your browser). 
+So you miss vitally important messages and a lot of informations are distorted and wrong, just for you. 
+The world outside will turn into a madhouse. The plugin can put your life in danger if you believe the informations.
 
-BUT
+_BUT_
 
-If you are a sensitive person who suffers from bad news more than normal people, this extension will be your salvation.
+if you are a sensitive person who suffers from bad news more than normal people, 
+this plungin will be your salvation..
 
-IS THAT ALL DAVE? NO, JIM ...
+_IS THIS ALL DAVE? NO JIM ...._
 
-As a special bonus, Twitter becomes utterly useless for you. 
+As a special bonus, Twitter becomes useless for you. Just for this feature this plugin is worthwhile.
 
 
 ## deinstallation
@@ -49,10 +53,11 @@ As a special bonus, Twitter becomes utterly useless for you.
 
  - Übersetzer
  - coder
+ - https://www.youtube.com/watch?v=6Kw12eGCtjY (draw-tipps für die icons)
 
 ## Credits
 
-- Felix fel.batu@gmail.com
+- felix
 - Boris boris.baumann@gmail.com
 - Phillipp Kasteck 
 - marco Nittler
