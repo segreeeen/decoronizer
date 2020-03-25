@@ -64,5 +64,4 @@ You're Coder? Very good. Please look at our code and improve it. Even small enha
 - marco Nittler
 
 ## License
-
-
+https://github.com/segreeeen/decoronizer/blob/master/LICENSE
