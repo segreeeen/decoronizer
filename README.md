@@ -2,7 +2,7 @@
 
 ![DeCoronizer Logo](images/decoronizer-logo-128.png?raw=true "Title")
 
-DeCoronize is a Chrome Extension that socially distances you from corona virus and fixes websites.
+DeCoronizer is a Chrome Extension that socially distances you from corona virus and fixes websites.
 
 ## Why?
 
