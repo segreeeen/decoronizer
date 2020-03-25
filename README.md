@@ -42,11 +42,11 @@ As a special bonus, Twitter becomes utterly useless for you. Just for this featu
 
 ## deinstallation
 
-- entwicklermodus an
-- entfernen
-- entwicklermodus aus
+- developermode on
+- remove
+- developermode off
 
-## Mitmachen
+## Contribute
 
 We need your support! For example, we want to provide many more languages.
 If you have time and energy, help us. Grab the content of one of the _locales folders and
