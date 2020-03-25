@@ -1,48 +1,91 @@
-// Copyright 2018 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 "use strict";
 
-// jedes element mit class button bekommt einen listener 
-// bei click wird words je nach locale gesetzt
+//memo
+/*
+chrome.browserAction.setIcon({path: icon});
 
-let language = chrome.i18n.getUILanguage();
+*/
 
-let btns = document.getElementsByClassName("button");
+const buttonStatus = ["unselected", "selected"];
+const statusIconPath = [
+  "images/statusicon/inactive.png",
+  "images/statusicon/active.png"
+];
+const language = chrome.i18n.getUILanguage();
+let btns = document.getElementsByClassName(buttonStatus[0]);
 
-chrome.extension.getBackgroundPage().console.log(language);
 
+
+// debugging:
+// chrome.extension.getBackgroundPage().console.log(language);
 
 for (const prop in btns) {
   let item = document.getElementById(btns[prop].id);
 
   if (item) {
     item.addEventListener("click", () => {
-      chrome.extension.getBackgroundPage().console.log(item.id);
-      const url = chrome.runtime.getURL('_locales/'+language+'/'+item.id+'.json');
+      // toggle this item button class unselected/selected
+      item.setAttribute(
+        "class",
+        buttonStatus[item.getAttribute("class") == buttonStatus[0] ? 1 : 0]
+      );
+
+      //set the other button classes to 'unselected'
+      deselectTheOtherItems(item.id);
+
+      //get the current selection status
+      // let currentStatus = item.getAttribute("class");
+
+      // update status in browser bar 
+      chrome.browserAction.setIcon({ path: statusIconPath[item.getAttribute("class") == buttonStatus[1] ? 1 : 0] });
+
+      // debugging:
+      // chrome.extension.getBackgroundPage().console.log("buttonStatus: ", item.getAttribute("class"));
+
+      const url = chrome.runtime.getURL(
+        "_locales/" + language + "/" + item.id + ".json"
+      );
       chrome.extension.getBackgroundPage().console.log(url);
       fetch(url)
-          .then((response) => response.json()) //assuming file contains json
-          .then((json) => {
-            chrome.storage.local.set({words: json}, function() {
-              console.log('Value is set to ' + json);
-            });
-            chrome.extension.getBackgroundPage().console.log(json);
+        .then(response => response.json()) //assuming file contains json
+        .then(json => {
+          chrome.storage.local.set({ words: json }, function() {
+            // debugging:
+            // console.log("Value is set to " + json);
+            // chrome.extension.getBackgroundPage().console.log(json);
           });
+          // debugging:
+          // chrome.extension.getBackgroundPage().console.log(json);
+        });
       reload();
+    }); // end clickevent
+  } // end if item
+} // end for
 
-    });
+// ----------------------------------------------------------------------------
+function deselectTheOtherItems(exeptionId) {
+  let selBtns = document.getElementsByClassName(buttonStatus[1]);
+  for (let i = 0; i < selBtns.length; i++) {
+    let item = document.getElementById(selBtns[i].id);
+    if (typeof item.id != "undefined" && item.id != exeptionId) {
+      // debugging:
+      // chrome.extension.getBackgroundPage().console.log(item);
+      selBtns[i].setAttribute("class", buttonStatus[0]);
+    }
   }
 }
-
+// ----------------------------------------------------------------------------
 function reload() {
   chrome.tabs.query({ active: true, currentWindow: true }, function(tab) {
-		var code = 'window.location.reload();';
-    chrome.tabs.executeScript(tab.id, {code: code});
+    var code = "window.location.reload();";
+    chrome.tabs.executeScript(tab.id, { code: code });
   });
 }
-
+// ----------------------------------------------------------------------------
 
 // function changeWord(word) {
 //   chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {

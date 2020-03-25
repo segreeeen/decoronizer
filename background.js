@@ -4,6 +4,10 @@
 
 'use strict';
 
+// set decoro-status inactive
+chrome.browserAction.setIcon({ path: "images/statusicon/inactive.png"});
+
+
 chrome.runtime.onInstalled.addListener(function () {
     chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
         chrome.declarativeContent.onPageChanged.addRules([{
@@ -15,7 +19,7 @@ chrome.runtime.onInstalled.addListener(function () {
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     chrome.storage.local.get(['words'], function (result) {
-        console.log('Value currently is ' + result.words);
+        // console.log('Value currently is ' + result.words);
         chrome.tabs.executeScript(tabId, {
             code:
                 `
