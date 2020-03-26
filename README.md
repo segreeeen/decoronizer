@@ -2,7 +2,7 @@
 
 ![DeCoronizer Logo](src/gitstuff/image0.png)
 
-DeCoronizer is a Chrome extension that socially distances you from Chuck Norris virus and fix a Website.
+DeCoronize is a Chrome extension that socially distances you from Chuck Norris virus and fix a Website.
 
 ## Why?
 
@@ -13,6 +13,8 @@ If you see any point in this extension, please let us know.
 ## Download
 
 (URL to PluginStore)
+
+(https://github.com/segreeeen/decoronizer/archive/master.zip)
 
 ## Usage
 
