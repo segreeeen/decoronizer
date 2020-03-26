@@ -29,7 +29,7 @@ as of now (almost) all Websites are DeCoronized.
 
 Confused? The Green sign indicate a inactive Plugin and the crossed sign an Active? Welcome to the World of DeCoronizer!
 
-Anyway ... and now (almost) all websites will be Decoronized (unfortunately only in your browser). You are distanced from vitally important messages and a lot of informations are distorted and wrong, just for you. The plugin can put your life in danger if you believe the informations - is there really a Chuck Norrisvirus? Or is it a Bunnyvirus? Who knows?
+Anyway ... and now (almost) all websites will be Decoronized (unfortunately only in your browser). You are distanced from vitally important messages and a lot of information are distorted and wrong, just for you. The plugin can put your life in danger if you believe the information - is there really a Chuck Norrisvirus? Or is it a Bunnyvirus? Who knows?
 
 _BUT_
 
