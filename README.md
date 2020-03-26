@@ -54,7 +54,6 @@ go for it!
 
 You're Coder? Very good. Please look at our code and improve it. Even small enhancements help a lot.
 
- - https://www.youtube.com/watch?v=6Kw12eGCtjY (draw-tipps für die icons)
 
 ## Credits
 
