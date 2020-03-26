@@ -16,6 +16,8 @@ If you see any point in this extension, please let us know.
 
 (https://github.com/segreeeen/decoronizer/archive/master.zip)
 
+Installation as Developer: https://github.com/segreeeen/decoronizer/wiki/(De)Installationsanleitung-Deutsch
+
 ## Usage
 
 After the installation you will have a new icon next to the address bar. 
