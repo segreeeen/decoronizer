@@ -12,7 +12,8 @@ If you see any point in this extension, please let us know.
 
 ## Download
 
-(URL to PluginStore)
+Install directly via Chrome Store:
+https://chrome.google.com/webstore/detail/decoronizer/npckgaijeiinglceeagkddhnfbkhoeko
 
 (https://github.com/segreeeen/decoronizer/archive/master.zip)
 
