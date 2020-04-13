@@ -1,25 +1,5 @@
 {
-  "cat": {
-    "message": "kitten"
-  },
-
-  "dog": {
-    "message": "doggy"
-  },
-
-  "mj": {
-    "message": "Michael Jackson"
-  },
-
-  "chuck": {
-    "message": "Chuck Norris"
-  },
-
-  "unicorn": {
-    "message": "unicorn"
-  },
-
-  "elephant": {
-    "message": "elephant"
+  "lang": {
+    "message": "en-US"
   }
 }

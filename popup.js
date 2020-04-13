@@ -22,7 +22,8 @@ const statusIconPath = [
     "images/statusicon/inactive.png",
     "images/statusicon/active.png"
 ];
-const language = chrome.i18n.getUILanguage();
+const language = chrome.i18n.getMessage("lang");
+chrome.extension.getBackgroundPage().console.log(language);
 let btns = document.getElementsByClassName("button");
 
 for (const prop in btns) {
