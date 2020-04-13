@@ -1,18 +1,34 @@
 [
-  {
-    "f": "Corona",
-    "r": "Elefant"
-  },
-  {
-    "f": "COVID",
-    "r": "FANT"
-  },
-  {
-    "f": "SARS",
-    "r": "TARÖÖ"
-  },
-  {
-    "f": "CoV",
-    "r": "RusseL"
-  }
+    {
+        "f": "Corona",
+        "r": "Elefant"
+    },
+    {
+        "f": "COVID-",
+        "r": "FANT-"
+    },
+    {
+        "f": "COVID ",
+        "r": "FANT "
+    },
+    {
+        "f": "COVID19",
+        "r": "FANT19"
+    },
+    {
+        "f": "SARS",
+        "r": "TARÖÖ"
+    },
+    {
+        "f": "CoV ",
+        "r": "RüsseL "
+    },
+    {
+        "f": "CoV-",
+        "r": "RüsseL-"
+    },
+    {
+        "f": "-CoV-",
+        "r": "-RüsseL-"
+    }
 ]

@@ -1,18 +1,34 @@
 [
-  {
-    "f": "Corona",
-    "r": "Kitten"
-  },
-  {
-    "f": "COVID",
-    "r": "CAT"
-  },
-  {
-    "f": "SARS",
-    "r": "CAT"
-  },
-  {
-    "f": "CoV-",
-    "r": "PurR-"
-  }
+    {
+        "f": "Corona",
+        "r": "Kitten"
+    },
+    {
+        "f": "COVID-",
+        "r": "CAT-"
+    },
+    {
+        "f": "COVID ",
+        "r": "CAT "
+    },
+    {
+        "f": "COVID19",
+        "r": "CAT19"
+    },
+    {
+        "f": "SARS",
+        "r": "CAT"
+    },
+    {
+        "f": "CoV ",
+        "r": "PurR "
+    },
+    {
+        "f": "CoV-",
+        "r": "PurR-"
+    },
+    {
+        "f": "-CoV-",
+        "r": "-PurR-"
+    }
 ]

@@ -1,34 +1,34 @@
 [
     {
         "f": "Corona",
-        "r": "Hündchen"
+        "r": "Yavru Köpek"
     },
     {
         "f": "COVID-",
-        "r": "HUND-"
+        "r": "KÖPEK-"
     },
     {
         "f": "COVID ",
-        "r": "HUND "
+        "r": "KÖPEK "
     },
     {
         "f": "COVID19",
-        "r": "HUND19"
+        "r": "KÖPEK19"
     },
     {
         "f": "SARS",
-        "r": "HUND"
+        "r": "KÖPEK"
     },
     {
         "f": "CoV ",
-        "r": "WufF "
+        "r": "Atkı "
     },
     {
         "f": "CoV-",
-        "r": "WufF-"
+        "r": "Atkı-"
     },
     {
         "f": "-CoV-",
-        "r": "-WufF-"
+        "r": "-Atkı-"
     }
 ]

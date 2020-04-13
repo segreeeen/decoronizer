@@ -1,34 +1,34 @@
 [
     {
         "f": "Corona",
-        "r": "Hündchen"
+        "r": "Tavşan"
     },
     {
         "f": "COVID-",
-        "r": "HUND-"
+        "r": "TAVŞAN-"
     },
     {
         "f": "COVID ",
-        "r": "HUND "
+        "r": "TAVŞAN "
     },
     {
         "f": "COVID19",
-        "r": "HUND19"
+        "r": "TAVŞAN19"
     },
     {
         "f": "SARS",
-        "r": "HUND"
+        "r": "TAVŞA"
     },
     {
         "f": "CoV ",
-        "r": "WufF "
+        "r": "ATLAMA "
     },
     {
         "f": "CoV-",
-        "r": "WufF-"
+        "r": "ATLAMA-"
     },
     {
         "f": "-CoV-",
-        "r": "-WufF-"
+        "r": "-ATLAMA-"
     }
 ]

@@ -1,18 +1,34 @@
 [
-  {
-    "f": "Corona",
-    "r": "Bunny"
-  },
-  {
-    "f": "COVID",
-    "r": "RABBIT"
-  },
-  {
-    "f": "SARS",
-    "r": "BUNY"
-  },
-  {
-    "f": "CoV",
-    "r": "HoP"
-  }
+    {
+        "f": "Corona",
+        "r": "Bunny"
+    },
+    {
+        "f": "COVID-",
+        "r": "RABBIT-"
+    },
+    {
+        "f": "COVID ",
+        "r": "RABBIT "
+    },
+    {
+        "f": "COVID19",
+        "r": "RABBIT19"
+    },
+    {
+        "f": "SARS",
+        "r": "BNY"
+    },
+    {
+        "f": "CoV ",
+        "r": "HoP "
+    },
+    {
+        "f": "CoV-",
+        "r": "HoP-"
+    },
+    {
+        "f": "-CoV-",
+        "r": "-HoP-"
+    }
 ]

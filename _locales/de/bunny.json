@@ -1,18 +1,34 @@
 [
-  {
-    "f": "Corona",
-    "r": "Häschen"
-  },
-  {
-    "f": "COVID",
-    "r": "HASE"
-  },
-  {
-    "f": "SARS",
-    "r": "HAS"
-  },
-  {
-    "f": "CoV",
-    "r": "Hopp"
-  }
+    {
+        "f": "Corona",
+        "r": "Häschen"
+    },
+    {
+        "f": "COVID-",
+        "r": "HASE-"
+    },
+    {
+        "f": "COVID ",
+        "r": "HASE "
+    },
+    {
+        "f": "COVID19",
+        "r": "HASE19"
+    },
+    {
+        "f": "SARS",
+        "r": "HAS"
+    },
+    {
+        "f": "CoV ",
+        "r": "HopP "
+    },
+    {
+        "f": "CoV-",
+        "r": "HopP-"
+    },
+    {
+        "f": "-CoV-",
+        "r": "-HopP-"
+    }
 ]

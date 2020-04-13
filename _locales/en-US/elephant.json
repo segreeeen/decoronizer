@@ -1,18 +1,34 @@
 [
-  {
-    "f": "Corona",
-    "r": "Elephant"
-  },
-  {
-    "f": "COVID",
-    "r": "PHANT"
-  },
-  {
-    "f": "SARS",
-    "r": "TRUMPET"
-  },
-  {
-    "f": "CoV",
-    "r": "Trunk"
-  }
+    {
+        "f": "Corona",
+        "r": "Elephant"
+    },
+    {
+        "f": "COVID-",
+        "r": "PHANT-"
+    },
+    {
+        "f": "COVID ",
+        "r": "PHANT "
+    },
+    {
+        "f": "COVID19",
+        "r": "PHANT19"
+    },
+    {
+        "f": "SARS",
+        "r": "TRUMPET"
+    },
+    {
+        "f": "CoV ",
+        "r": "TrunK "
+    },
+    {
+        "f": "CoV-",
+        "r": "TrunK-"
+    },
+    {
+        "f": "-CoV-",
+        "r": "-TrunK-"
+    }
 ]

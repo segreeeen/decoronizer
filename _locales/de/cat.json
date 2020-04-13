@@ -1,18 +1,34 @@
 [
-  {
-    "f": "Corona",
-    "r": "Kätzchen"
-  },
-  {
-    "f": "COVID",
-    "r": "KATZE"
-  },
-  {
-    "f": "SARS",
-    "r": "KATZ"
-  },
-  {
-    "f": "CoV",
-    "r": "Schnurr"
-  }
+    {
+        "f": "Corona",
+        "r": "Kätzchen"
+    },
+    {
+        "f": "COVID-",
+        "r": "KATZE-"
+    },
+    {
+        "f": "COVID ",
+        "r": "KATZE "
+    },
+    {
+        "f": "COVID19",
+        "r": "KATZE19"
+    },
+    {
+        "f": "SARS",
+        "r": "KATZ"
+    },
+    {
+        "f": "CoV ",
+        "r": "SchnurR "
+    },
+    {
+        "f": "CoV-",
+        "r": "SchnurR-"
+    },
+    {
+        "f": "-CoV-",
+        "r": "-SchnurR-"
+    }
 ]

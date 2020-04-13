@@ -1,18 +1,34 @@
 [
-  {
-    "f": "Corona",
-    "r": "Unicorn"
-  },
-  {
-    "f": "COVID",
-    "r": "HORN"
-  },
-  {
-    "f": "SARS",
-    "r": "GLITTER"
-  },
-  {
-    "f": "CoV",
-    "r": "HorN"
-  }
+    {
+        "f": "Corona",
+        "r": "Unicorn"
+    },
+    {
+        "f": "COVID-",
+        "r": "HORN-"
+    },
+    {
+        "f": "COVID ",
+        "r": "HORN "
+    },
+    {
+        "f": "COVID19",
+        "r": "HORN19"
+    },
+    {
+        "f": "SARS",
+        "r": "GLITTER"
+    },
+    {
+        "f": "CoV ",
+        "r": "HorN "
+    },
+    {
+        "f": "CoV-",
+        "r": "HorN-"
+    },
+    {
+        "f": "-CoV-",
+        "r": "-HorN-"
+    }
 ]

@@ -1,18 +1,34 @@
 [
-  {
-    "f": "Corona",
-    "r": "Chuck Norris"
-  },
-  {
-    "f": "COVID",
-    "r": "CHUCK"
-  },
-  {
-    "f": "SARS",
-    "r": "NORRIS"
-  },
-  {
-    "f": "CoV",
-    "r": "Norris"
-  }
+    {
+        "f": "Corona",
+        "r": "Chuck Norris"
+    },
+    {
+        "f": "COVID-",
+        "r": "CHUCK-"
+    },
+    {
+        "f": "COVID ",
+        "r": "CHUCK "
+    },
+    {
+        "f": "COVID19",
+        "r": "CHUCK19"
+    },
+    {
+        "f": "SARS",
+        "r": "NORRIS"
+    },
+    {
+        "f": "CoV ",
+        "r": "NorriS "
+    },
+    {
+        "f": "CoV-",
+        "r": "NorriS-"
+    },
+    {
+        "f": "-CoV-",
+        "r": "-NorriS-"
+    }
 ]
