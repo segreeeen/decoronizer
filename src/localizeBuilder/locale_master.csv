@@ -1,0 +1,31 @@
+id,corr,file,en,de,tr,es
+10,10,translator,Felix and Boris,Felix und Boris,Miles ve Ali,?
+20,20,translator,boris.baumann@gmail.com,boris.baumann@gmail.com,?,?
+100,100,global,Corona,Corona,Corona,Corona
+200,200,global,COVID,COVID,COVID,COVID
+300,300,global,SARS,SARS,SARS,SARS
+400,400,global,CoV,CoV,CoV,CoV
+500,100,bunny,Bunny,Häschen,Tavşan,Conejito
+600,200,bunny,RABBIT,HASE,TAVŞAN,CONEJITO
+700,300,bunny,BNY,HAS,TAVŞA,CONEJ
+800,400,bunny,HoP,HopP,ATLAMA,SALTAR
+900,100,cat,Kitten,Kätzchen,kedi yavrusu,Gatitos
+1000,200,cat,CAT,KATZE,KEDI,GATO
+1100,300,cat,CAT,KATZ,KED,GAT
+1200,400,cat,PurR,SchnurR,MırlamaK,RonroneO
+1300,100,chuck,Chuck Norris,Chuck Norris,Chuck Norris,Chuck Norris
+1400,200,chuck,CHUCK,CHUCK,CHUCK,CHUCK
+1500,300,chuck,NORRIS,NORRIS,NORRIS,NORRIS
+1600,400,chuck,NorriS,NorriS,NorriS,NorriS
+1700,100,dog,Poppy,Hündchen,Yavru Köpek,Cachorro
+1800,200,dog,DOG,HUND,KÖPEK,PERRO
+1900,300,dog,PUP,HUND,KÖPEK,PERRO
+2000,400,dog,WooF,WufF,Atkı,LadridoS
+2100,100,elephant,Elephant,Elefant,Fil,?
+2200,200,elephant,PHANT,FANT,FIL,?
+2300,300,elephant,TRUMPET,TARÖÖ,GÜRÜLTÜ,?
+2400,400,elephant,TrunK,RüsseL,GövdE,?
+2500,100,unicorn,Unicorn,Einhorn,tek boynuzlu at,?
+2600,200,unicorn,HORN,HORN,BOYNUZ,?
+2700,300,unicorn,GLITTER,GLITZER,parıltı,?
+2800,400,unicorn,HorN,HorN,BoynuZ,?

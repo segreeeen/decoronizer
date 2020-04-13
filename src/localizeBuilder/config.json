@@ -1,0 +1,23 @@
+{
+    "outputfolder" : "_locales",
+    "sourcecsv" : "locale_master.csv",
+    "msgmasterpath" : "message_master.json",
+    "msgdestiantionname" : "messages.json",
+    "activeLocales" : [
+        "en","de","tr"
+    ],
+    "localCorrelations" : {
+        "de": "de",
+        "en": "en",
+        "en-GB": "en",
+        "en-US": "en",
+        "tr": "tr"
+    },
+    "derivateTable" : {
+        "100": ["{string}"],
+        "200": ["{string}-","{string} ","{string}19"],
+        "300": ["{string}"],
+        "400": ["{string} ","{string}-","-{string}-"]
+    }
+}
+
