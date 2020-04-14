@@ -45,12 +45,6 @@ _IS THIS ALL DAVE? NO JIM ...._
 As a special bonus, Twitter becomes utterly useless for you. Just for this feature this plugin is worthwhile.
 
 
-## deinstallation
-
-- developermode on
-- remove
-- developermode off
-
 ## Contribute
 
 We need your support! For example, we want to provide many more languages.
