@@ -15,27 +15,53 @@ require_once('config_default.php');
 
 $msgMaster = file_get_contents($config[ConfigConstants::PATH_MSG_MASTER]);
 
-$localeMaster = array_map(
+$localeMaster = processLocaleMaster($config);
+
+function processLocaleMaster(array $config): array
+{
+    $localeMaster = loadLocaleMasterData($config);
+    $localeMaster = processLocaleMasterData($localeMaster);
+    $localeMaster = rebuildWithIdKeys($localeMaster);
+
+    return $localeMaster;
+}
+
+function loadLocaleMasterData(array $config): array
+{
+    $localeMaster = array_map(
         'str_getcsv',
         file($config[ConfigConstants::PATH_SOURCE_CSV])
-);
-array_walk($localeMaster, function(&$a) use ($localeMaster) {
-  $a = array_combine($localeMaster[0], $a);
-});
-array_shift($localeMaster); # remove column header
+    );
 
-// set csv-IDs to key
-$tmp = [];
-foreach ($localeMaster as $item) {
-    $tmp[$item['id']] = $item;
+    return $localeMaster;
 }
-$data = $tmp;
-// print_r($data);
+
+function processLocaleMasterData(array $localeMaster): array
+{
+    array_walk($localeMaster, function(&$a) use ($localeMaster) {
+        $a = array_combine($localeMaster[0], $a);
+    });
+    array_shift($localeMaster); # remove column header
+
+    return $localeMaster;
+}
+
+function rebuildWithIdKeys(array $localeMaster): array
+{
+    $localeMasterIdKeys = [];
+
+    foreach ($localeMaster as $item) {
+        $id = $item['id'];
+        $localeMasterIdKeys[$id] = $item;
+    }
+
+    return $localeMasterIdKeys;
+}
 
 // build structure
 
 $fileGroup = '';
-foreach ($data as $key => $value) {
+foreach ($localeMaster as $key => $value) {
  
     
     if ($value['id'] != $value['corr']) {
@@ -51,7 +77,7 @@ foreach ($data as $key => $value) {
             
             // build replace array by replace derivateTable
             foreach ($config[ConfigConstants::DERIVATIVE_TABLE][$value['corr']] as $pattern) {
-                $f_word = str_replace('{string}',$data[$value['corr']][$localeCode],$pattern);
+                $f_word = str_replace('{string}',$localeMaster[$value['corr']][$localeCode],$pattern);
                 $r_word = str_replace('{string}',$value[$localeCode],$pattern);
                 $fr_arr[] = array("f" => $f_word,"r" => $r_word);
             }
@@ -63,7 +89,7 @@ foreach ($data as $key => $value) {
             }
             
             echo("Replace 
-            <span><b>".$data[$value['corr']][$localeCode]."</b></span> 
+            <span><b>".$localeMaster[$value['corr']][$localeCode]."</b></span> 
             for 
             <span>".$localeCode." </span> 
             : 

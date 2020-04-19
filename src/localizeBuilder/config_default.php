@@ -1,6 +1,6 @@
 <?php
     $config = [
-        ConfigConstants::PATH_OUTPUT => '..\..\_locales',
+        ConfigConstants::PATH_OUTPUT => '_locales',
         ConfigConstants::PATH_SOURCE_CSV => 'locale_master.csv',
 
         ConfigConstants::PATH_MSG_MASTER => 'message_master.json',
