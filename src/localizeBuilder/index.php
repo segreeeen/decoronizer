@@ -9,6 +9,8 @@
 
 <?php
 require_once('ConfigConstants.php');
+require_once('LocaleConstants.php');
+
 require_once('config_default.php');
 
 // http://localhost/chrome/decoronizer/src/localizeBuilder/index.php
@@ -17,6 +19,11 @@ $msgMaster = file_get_contents($config[ConfigConstants::PATH_MSG_MASTER]);
 
 $localeMaster = processLocaleMaster($config);
 
+/**
+ * @param array $config
+ *
+ * @return array
+ */
 function processLocaleMaster(array $config): array
 {
     $localeMaster = loadLocaleMasterData($config);
@@ -26,6 +33,11 @@ function processLocaleMaster(array $config): array
     return $localeMaster;
 }
 
+/**
+ * @param array $config
+ *
+ * @return array
+ */
 function loadLocaleMasterData(array $config): array
 {
     $localeMaster = array_map(
@@ -36,6 +48,11 @@ function loadLocaleMasterData(array $config): array
     return $localeMaster;
 }
 
+/**
+ * @param array $localeMaster
+ *
+ * @return array
+ */
 function processLocaleMasterData(array $localeMaster): array
 {
     array_walk($localeMaster, function(&$a) use ($localeMaster) {
@@ -46,6 +63,11 @@ function processLocaleMasterData(array $localeMaster): array
     return $localeMaster;
 }
 
+/**
+ * @param array $localeMaster
+ *
+ * @return array
+ */
 function rebuildWithIdKeys(array $localeMaster): array
 {
     $localeMasterIdKeys = [];
@@ -60,49 +82,86 @@ function rebuildWithIdKeys(array $localeMaster): array
 
 // build structure
 
-$fileGroup = '';
+$lastTargetFile = '';
 foreach ($localeMaster as $key => $value) {
  
-    
-    if ($value['id'] != $value['corr']) {
-        
-        if ($value['file'] != $fileGroup) {
-            echo("--------- File ".$value['file'].".json ---------<br>");
-            $fileGroup = $value['file'];
+    if (isCorrelated($value)) {
+        continue;
+    }
+
+    /**
+     * @var string $currentTargetFile
+     */
+    $currentTargetFile = $value[LocaleConstants::FOR_FILE];
+
+    if (isNewFile($currentTargetFile, $lastTargetFile)) {
+        $processingNewFileHeader = sprintf('--- %s.json ---<br>', $currentTargetFile);
+        echo($processingNewFileHeader);
+
+        $lastTargetFile = $currentTargetFile;
+    }
+
+    /**
+     * @var array $activeLocaleCodes
+     */
+    $activeLocaleCodes = $config[ConfigConstants::LOCALES_ACTIVE];
+
+    foreach ($activeLocaleCodes as $activeLocaleCode) {
+
+        $correlation = $value[LocaleConstants::CORRELATION];
+        $derivativeTable = $config[ConfigConstants::DERIVATIVE_TABLE];
+        $derivationPatterns = $derivativeTable[$correlation];
+
+        // build replace array by replace derivateTable
+
+        foreach ($derivationPatterns as $pattern) {
+            $findThis = str_replace('{string}', $localeMaster[$value['corr']][$activeLocaleCode], $pattern);
+            $replaceWith = str_replace('{string}', $value[$activeLocaleCode], $pattern);
+            $findReplaceData[] = array('f' => $findThis, 'r' => $replaceWith);
         }
 
-        //use only the active Locales
-        foreach ($config[ConfigConstants::LOCALES_ACTIVE] as $localeCode) {
-
-            
-            // build replace array by replace derivateTable
-            foreach ($config[ConfigConstants::DERIVATIVE_TABLE][$value['corr']] as $pattern) {
-                $f_word = str_replace('{string}',$localeMaster[$value['corr']][$localeCode],$pattern);
-                $r_word = str_replace('{string}',$value[$localeCode],$pattern);
-                $fr_arr[] = array("f" => $f_word,"r" => $r_word);
-            }
-
-            if (is_array($arr[$localeCode][$value['file']])) {
-                $arr[$localeCode][$value['file']] = array_merge($arr[$localeCode][$value['file']],$fr_arr);
-            } else {
-                $arr[$localeCode][$value['file']] = $fr_arr;
-            }
-            
-            echo("Replace 
-            <span><b>".$localeMaster[$value['corr']][$localeCode]."</b></span> 
-            for 
-            <span>".$localeCode." </span> 
-            : 
-            <span>".count($fr_arr)."</span> 
-            <br>\n");
-
-            unset($fr_arr);
-            
+        if (is_array($arr[$activeLocaleCode][$value['file']])) {
+            $arr[$activeLocaleCode][$value['file']] = array_merge($arr[$activeLocaleCode][$value['file']], $findReplaceData);
+        } else {
+            $arr[$activeLocaleCode][$value['file']] = $findReplaceData;
         }
+
+        echo("Replace 
+        <span><b>".$localeMaster[$value['corr']][$activeLocaleCode]."</b></span> 
+        for 
+        <span>".$activeLocaleCode." </span> 
+        : 
+        <span>".count($findReplaceData)."</span> 
+        <br>\n");
+
+        unset($findReplaceData);
+
     }
 }
 
+/**
+ * @param array $value
+ *
+ * @return bool
+ */
+function isCorrelated(array $value): bool
+{
+    $id = $value[LocaleConstants::ID_TEXT];
+    $correlation = $value[LocaleConstants::CORRELATION];
 
+    return $id === $correlation;
+}
+
+/**
+ * @param string $currentTargetFile
+ * @param string $lastTargetFile
+ *
+ * @return bool
+ */
+function isNewFile(string $currentTargetFile, string $lastTargetFile): bool
+{
+    return $currentTargetFile != $lastTargetFile;
+}
 
 // Add Local Correlations (en-US etc.)
 $localeCorrelations = $config[ConfigConstants::LOCALE_CORRELATIONS];
@@ -190,23 +249,32 @@ function escape_sequence_decode($str) {
 
 
 // --------------------------------------------------------------------------------------
-function build_json ($arr='') {
+function build_json ($dataToEncode='') {
 
     
-    if (is_array($arr))  return json_encode($arr,JSON_PRETTY_PRINT,JSON_UNESCAPED_UNICODE);
+    if (true === is_array($dataToEncode)) {
+        return json_encode(
+                $dataToEncode,
+                JSON_PRETTY_PRINT,
+                JSON_UNESCAPED_UNICODE
+        );
+    }
 
 }
 
 
 // --------------------------------------------------------------------------------------
 function deleteDir($dirPath) {
-    if (! is_dir($dirPath)) {
-        throw new InvalidArgumentException("$dirPath must be a directory");
+    if (false === is_dir($dirPath)) {
+        throw new InvalidArgumentException("$dirPath must be a directory.");
     }
-    if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
+
+    if (false === hasTrailingSlash($dirPath)) {
         $dirPath .= '/';
     }
+
     $files = glob($dirPath . '*', GLOB_MARK);
+
     foreach ($files as $file) {
         if (is_dir($file)) {
             deleteDir($file);
@@ -218,6 +286,10 @@ function deleteDir($dirPath) {
 }
 // --------------------------------------------------------------------------------------
 
+function hasTrailingSlash(string $path): bool
+{
+    return substr($path, -1) === '/';
+}
 
 ?>
 
