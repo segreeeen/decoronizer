@@ -1,67 +1,71 @@
 <!DOCTYPE html>
 <html lang="de">
-  <head>
+<head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Localize-Builder</title>
-  </head>
-  <body>
+</head>
+<body>
 
+<?php
+require_once('ConfigConstants.php');
+require_once('config_default.php');
 
-<?
+// http://localhost/chrome/decoronizer/src/localizeBuilder/index.php
 
-// http://localhost/chrome/decoronizer/src/localizeHelper/index.php
+$msgMaster = file_get_contents($config[ConfigConstants::PATH_MSG_MASTER]);
 
-
-$conf = json_decode(file_get_contents('config.json'),JSON_OBJECT_AS_ARRAY);
-// print_r($conf);
-
-$msg_master = file_get_contents($conf['msgmasterpath']);
-
-$data = array_map('str_getcsv', file($conf['sourcecsv']));
-array_walk($data, function(&$a) use ($data) {
-  $a = array_combine($data[0], $a);
+$localeMaster = array_map(
+        'str_getcsv',
+        file($config[ConfigConstants::PATH_SOURCE_CSV])
+);
+array_walk($localeMaster, function(&$a) use ($localeMaster) {
+  $a = array_combine($localeMaster[0], $a);
 });
-array_shift($data); # remove column header
+array_shift($localeMaster); # remove column header
 
 // set csv-IDs to key
-foreach ($data as $item) $tmp[$item['id']] = $item;
+$tmp = [];
+foreach ($localeMaster as $item) {
+    $tmp[$item['id']] = $item;
+}
 $data = $tmp;
 // print_r($data);
 
 // build structure
 
-foreach ($data as $k => $v) {
+$fileGroup = '';
+foreach ($data as $key => $value) {
  
     
-    if ($v['id'] != $v['corr']) {
+    if ($value['id'] != $value['corr']) {
         
-        if ($v['file'] != $filegroup) {
-            echo("--------- File ".$v['file'].".json ---------<br>");
-            $filegroup = $v['file'];
+        if ($value['file'] != $fileGroup) {
+            echo("--------- File ".$value['file'].".json ---------<br>");
+            $fileGroup = $value['file'];
         }
 
         //use only the active Locales
-        foreach ($conf['activeLocales'] as $localecode) {
+        foreach ($config[ConfigConstants::LOCALES_ACTIVE] as $localeCode) {
 
             
             // build replace array by replace derivateTable
-            foreach ($conf['derivateTable'][$v['corr']] as $pattern) {
-                $f_word = str_replace('{string}',$data[$v['corr']][$localecode],$pattern);
-                $r_word = str_replace('{string}',$v[$localecode],$pattern);
+            foreach ($config[ConfigConstants::DERIVATIVE_TABLE][$value['corr']] as $pattern) {
+                $f_word = str_replace('{string}',$data[$value['corr']][$localeCode],$pattern);
+                $r_word = str_replace('{string}',$value[$localeCode],$pattern);
                 $fr_arr[] = array("f" => $f_word,"r" => $r_word);
             }
 
-            if (is_array($arr[$localecode][$v['file']])) {
-                $arr[$localecode][$v['file']] = array_merge($arr[$localecode][$v['file']],$fr_arr);
+            if (is_array($arr[$localeCode][$value['file']])) {
+                $arr[$localeCode][$value['file']] = array_merge($arr[$localeCode][$value['file']],$fr_arr);
             } else {
-                $arr[$localecode][$v['file']] = $fr_arr;
+                $arr[$localeCode][$value['file']] = $fr_arr;
             }
             
             echo("Replace 
-            <span><b>".$data[$v['corr']][$localecode]."</b></span> 
+            <span><b>".$data[$value['corr']][$localeCode]."</b></span> 
             for 
-            <span>".$localecode." </span> 
+            <span>".$localeCode." </span> 
             : 
             <span>".count($fr_arr)."</span> 
             <br>\n");
@@ -75,32 +79,40 @@ foreach ($data as $k => $v) {
 
 
 // Add Local Correlations (en-US etc.)
-foreach ($conf['localCorrelations'] as $locCorr => $base)  $temp[$locCorr] = $arr[$base];
-$arr = $temp;
+$localeCorrelations = $config[ConfigConstants::LOCALE_CORRELATIONS];
+$temp_arr = [];
+
+foreach ($localeCorrelations as $localeCorrelation => $base) {
+    $temp_arr[$localeCorrelation] = $arr[$base];
+}
+
+$arr = $temp_arr;
 
 echo("<hr>");
 
 // create local-folder
-if (is_dir($conf['outputfolder'])) deleteDir($conf['outputfolder']);
-mkdir($conf['outputfolder'],0777);
+if (true === is_dir($config[ConfigConstants::PATH_OUTPUT])) {
+    deleteDir($config[ConfigConstants::PATH_OUTPUT]);
+}
+mkdir($config[ConfigConstants::PATH_OUTPUT],0777);
 
 //print_r($arr);
 
-foreach ($arr as $loc_foler_name => $filecontents) {
+foreach ($arr as $localeFolderName => $fileContents) {
     
-    $path = $conf['outputfolder']."/".$loc_foler_name;
+    $path = $config[ConfigConstants::PATH_OUTPUT]."/".$localeFolderName;
     echo("<hr>");
     echo("Write Folder ".$path ."<br>");
     mkdir($path,0777);
     
-    $localmsgcontent = str_replace('{string}',$loc_foler_name,$msg_master);
-    file_put_contents($path."/".$conf['msgdestiantionname'],$localmsgcontent);
-    echo("Write file ".$conf['msgdestiantionname'] ."<br>");
+    $localeMessageContent = str_replace('{string}',$localeFolderName,$msgMaster);
+    file_put_contents($path."/".$config[ConfigConstants::PATH_MSG_DESTINATION],$localeMessageContent);
+    echo("Write file ".$config[ConfigConstants::PATH_MSG_DESTINATION] ."<br>");
 
-    foreach ($filecontents as $filebasename => $content) {
+    foreach ($fileContents as $fileBaseName => $content) {
         
-        $filename = $path."/".$filebasename.".json";
-        $json = escape_sequence_decode(build_json($arr[$loc_foler_name][$filebasename]));
+        $filename = $path."/".$fileBaseName.".json";
+        $json = escape_sequence_decode(build_json($arr[$localeFolderName][$fileBaseName]));
         echo("Write file ".$filename ."<br>");
         file_put_contents($filename,$json);
         

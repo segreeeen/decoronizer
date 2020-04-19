@@ -17,18 +17,18 @@
     },
     {
         "f": "SARS",
-        "r": "NYUSSZ"
+        "r": "NYSZ"
     },
     {
         "f": "CoV ",
-        "r": "MussZ "
+        "r": "HoPP "
     },
     {
         "f": "CoV-",
-        "r": "MussZ-"
+        "r": "HoPP-"
     },
     {
         "f": "-CoV-",
-        "r": "-MussZ-"
+        "r": "-HoPP-"
     }
 ]

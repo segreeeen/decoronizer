@@ -1,19 +1,19 @@
 [
     {
         "f": "Corona",
-        "r": "Unikornis"
+        "r": "Egyszarvú"
     },
     {
         "f": "COVID-",
-        "r": "UNIK-"
+        "r": "SZARV-"
     },
     {
         "f": "COVID ",
-        "r": "UNIK "
+        "r": "SZARV "
     },
     {
         "f": "COVID19",
-        "r": "UNIK19"
+        "r": "SZARV19"
     },
     {
         "f": "SARS",
@@ -21,14 +21,14 @@
     },
     {
         "f": "CoV ",
-        "r": "UniK "
+        "r": "SzarV "
     },
     {
         "f": "CoV-",
-        "r": "UniK-"
+        "r": "SzarV-"
     },
     {
         "f": "-CoV-",
-        "r": "-UniK-"
+        "r": "-SzarV-"
     }
 ]
