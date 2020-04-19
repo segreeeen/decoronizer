@@ -1,0 +1,34 @@
+[
+    {
+        "f": "Corona",
+        "r": "Nyuszi"
+    },
+    {
+        "f": "COVID-",
+        "r": "NYUSZI-"
+    },
+    {
+        "f": "COVID ",
+        "r": "NYUSZI "
+    },
+    {
+        "f": "COVID19",
+        "r": "NYUSZI19"
+    },
+    {
+        "f": "SARS",
+        "r": "NYUSSZ"
+    },
+    {
+        "f": "CoV ",
+        "r": "MussZ "
+    },
+    {
+        "f": "CoV-",
+        "r": "MussZ-"
+    },
+    {
+        "f": "-CoV-",
+        "r": "-MussZ-"
+    }
+]
