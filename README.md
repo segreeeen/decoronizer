@@ -2,7 +2,7 @@
 
 ![DeCoronizer Logo](src/gitstuff/image0.png)
 
-DeCoronizer is a Chrome extension that socially distances you from Hündchen virus and fix a Website.
+DeCoronizer is a Chrome extension that socially distances you from the Puppy virus by fixing websites.
 
 ## Why?
 
@@ -17,41 +17,46 @@ https://chrome.google.com/webstore/detail/decoronizer/npckgaijeiinglceeagkddhnfb
 
 (https://github.com/segreeeen/decoronizer/archive/master.zip)
 
-Installation as Developer: https://github.com/segreeeen/decoronizer/wiki/(De)Installationsanleitung-Deutsch
+Install as a developer: https://github.com/segreeeen/decoronizer/wiki/(De)Installationsanleitung-Deutsch
 
 ## Usage
 
-After the installation you will have a new icon next to the address bar. 
+Once installed, you will have a new icon next to the address bar. 
 
 ![DeCoronizer Logo](src/gitstuff/image10.png)
 
-By clicking on the icon you can choose the flavour (Kitty, Dogs, Chuck etc.) 
+Select a flavour (Kitty, Dogs, Chuck etc.) by clicking on one of the images. 
 
 ![DeCoronizer Logo](src/gitstuff/image20.png)
 
-The Icon switch to a prohibitory sign to indicate
-as of now (almost) all Websites are DeCoronized.
+The icon in your browser will now change to a prohibitory sign, indicating that from now on,
+(almost) all websites you visit, will be DeCoronized.
 
-Confused? The Green sign indicate a inactive Plugin and the crossed sign an Active? Welcome to the World of DeCoronizer!
+Confused? The green sign indicates an inactive plugin and the crossed sign an active?
+Welcome to the world of DeCoronizer!
 
-Anyway ... and now (almost) all websites will be Decoronized (unfortunately only in your browser). You are distanced from vitally important messages and a lot of information are distorted and wrong, just for you. The plugin can put your life in danger if you believe the information - is there really a Chuck Norrisvirus? Or is it a Bunnyvirus? Who knows?
+Anyway ... from now on, (almost) all websites will be DeCoronized (unfortunately only in your browser).
+You are distanced from vitally important messages and a lot of information is distorted and messed up,
+just for you. The plugin can put your life in danger if you believe the information - is there really
+a Chuck Norris-virus? Or is it a Bunnyvirus? Who knows?
 
 _BUT_
 
-If you are a sensitive person who suffers from bad news more than normal people, this extension will be your salvation.
+If you are a sensitive person who suffers from bad news more than normal people,
+this extension will be your salvation.
 
-_IS THIS ALL DAVE? NO JIM ...._
+_IS THIS ALL, DAVE? NO, JIM ...._
 
-As a special bonus, Twitter becomes utterly useless for you. Just for this feature this plugin is worthwhile.
+As a special bonus, Twitter becomes utterly useless for you.
+This feature alone already makes this plugin worthwhile.
 
 
 ## Contribute
 
 We need your support! For example, we want to provide many more languages.
-If you have time and energy, help us. Grab the content of one of the _locales folders and
-go for it!
+If you have the time and energy, help us. Grab the content of one of the _locales folders and go for it!
 
-You're Coder? Very good. Please look at our code and improve it. Even small enhancements help a lot.
+You're a coder? Very good. Please look at our code and improve it. Even small enhancements help a lot.
 
 
 ## Credits
@@ -59,7 +64,7 @@ You're Coder? Very good. Please look at our code and improve it. Even small enha
 - Felix fel.batu@gmail.com
 - Boris boris.baumann@gmail.com
 - Phillipp Kasteck 
-- marco Nittler
+- Marco Nittler
 
 ## License
 GNU General Public License v3.0
