@@ -70,4 +70,12 @@ class Config
     {
         return $this->config[ConfigConstants::DERIVATIVE_TABLE];
     }
+
+    /**
+     * @return bool
+     */
+    public function isVerbose(): bool
+    {
+        return $this->config[ConfigConstants::VERBOSE_MODE];
+    }
 }

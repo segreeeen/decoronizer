@@ -5,18 +5,18 @@ require_once('ConfigConstants.php');
 require_once('LocaleConstants.php');
 
 require_once('Config.php');
-require_once('config_default.php');
 
 require_once('MasterProcessor.php');
 
 require_once('PageRenderer.php');
 
-$config = new Config($config);
+$config = buildConfig();
+
 $masterProcessor = new MasterProcessor();
 
 $localeMaster = $masterProcessor->processLocaleMaster($config);
 
-$pageRenderer = new PageRenderer();
+$pageRenderer = new PageRenderer($config);
 
 $pageRenderer->renderHeader();
 
@@ -30,6 +30,16 @@ writeOutFiles($replacementDataWithCorrelations, $pageRenderer, $config);
 
 $pageRenderer->renderFoot();
 
+/**
+ * @return Config
+ */
+function buildConfig(): Config
+{
+    include('config_default.php');
+
+    /** @var array $config */
+    return new Config($config);
+}
 
 /**
  * @param array $localeMaster
@@ -178,25 +188,41 @@ function writeOutFiles(array $replacementDataWithCorrelations, PageRenderer $pag
     $destinationPath = $config->getMsgDestinationPath();
 
     foreach ($replacementDataWithCorrelations as $localeFolderName => $fileContents) {
-
-        $folderPath = $outputPath."/".$localeFolderName;
+        $folderPath = $outputPath . "/" . $localeFolderName;
         $pageRenderer->renderWriteFolderInfo($folderPath);
         mkdir($folderPath,0777);
 
-        $localeMessageContent = str_replace('{string}',$localeFolderName,$msgMaster);
-        file_put_contents($folderPath."/".$destinationPath,$localeMessageContent);
+        $localeMessageContent = str_replace('{string}', $localeFolderName, $msgMaster);
+        file_put_contents($folderPath . '/' . $destinationPath, $localeMessageContent);
         $pageRenderer->renderWriteFileInfo($destinationPath);
 
         foreach ($fileContents as $fileBaseName => $content) {
+            $replacementsArray = $replacementDataWithCorrelations[$localeFolderName][$fileBaseName];
+            $json = build_json($replacementsArray);
 
-            $filename = $folderPath."/".$fileBaseName.".json";
-            $json = escape_sequence_decode(build_json($replacementDataWithCorrelations[$localeFolderName][$fileBaseName]));
+            $filename = $folderPath . '/' . $fileBaseName . '.json';
             $pageRenderer->renderWriteFileInfo($filename);
-            file_put_contents($filename,$json);
-
+            file_put_contents($filename, $json);
         }
-
     }
+}
+
+/**
+ * @param array $dataToEncode
+ *
+ * @return string
+ */
+function build_json (array $dataToEncode): string
+{
+    $jsonEncodedReplacements = json_encode(
+        $dataToEncode,
+        JSON_PRETTY_PRINT,
+        JSON_UNESCAPED_UNICODE
+    );
+
+    $json = escape_sequence_decode($jsonEncodedReplacements);
+
+    return $json;
 }
 
 /**
@@ -250,17 +276,6 @@ function escape_sequence_decode(string $str) {
 
         return html_entity_decode('&#'.$cp.';');
     }, $str);
-}
-
-function build_json ($dataToEncode='')
-{
-    if (true === is_array($dataToEncode)) {
-        return json_encode(
-                $dataToEncode,
-                JSON_PRETTY_PRINT,
-                JSON_UNESCAPED_UNICODE
-        );
-    }
 }
 
 /**

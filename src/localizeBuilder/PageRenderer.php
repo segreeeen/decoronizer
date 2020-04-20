@@ -3,19 +3,16 @@
 class PageRenderer
 {
     /**
-     * @return void
+     * @var Config $config
      */
-    public function renderHeader(): void
-    {
-        echo(file_get_contents('header.html'));
-    }
+    protected $config;
 
     /**
-     * @return void
+     * @param Config $config
      */
-    public function renderFoot(): void
+    public function __construct(Config $config)
     {
-        echo(file_get_contents('footer.html'));
+        $this->config = $config;
     }
 
     /**
@@ -25,7 +22,27 @@ class PageRenderer
      */
     public function renderText(string $text): void
     {
-        echo($text);
+        if (false === $this->config->isVerbose()) {
+            return;
+        }
+
+        $this->renderText($text);
+    }
+
+    /**
+     * @return void
+     */
+    public function renderHeader(): void
+    {
+        $this->renderText(file_get_contents('header.html'));
+    }
+
+    /**
+     * @return void
+     */
+    public function renderFoot(): void
+    {
+        $this->renderText(file_get_contents('footer.html'));
     }
 
     /**
@@ -33,7 +50,7 @@ class PageRenderer
      */
     public function renderSeparatorLine(): void
     {
-        echo("<hr>");
+        $this->renderText("<hr>");
     }
 
     /**
@@ -55,8 +72,8 @@ class PageRenderer
      */
     public function renderWriteFolderInfo(string $destinationFolder): void
     {
-        echo('<hr>');
-        echo('Write Folder '. $destinationFolder . '<br>');
+        $this->renderText('<hr>');
+        $this->renderText('Write Folder '. $destinationFolder . '<br>');
     }
 
     /**
@@ -66,7 +83,7 @@ class PageRenderer
      */
     public function renderWriteFileInfo(string $destinationFile): void
     {
-        echo('Write file ' . $destinationFile . '<br>');
+        $this->renderText('Write file ' . $destinationFile . '<br>');
     }
 
     /**
@@ -78,7 +95,7 @@ class PageRenderer
      */
     public function renderReplaceInfo(string $replacing, string $forLocale, int $count): void
     {
-        echo('Replace 
+        $this->renderText('Replace 
         <span><b>' . $replacing . '</b></span> 
         for 
         <span>' . $forLocale . '</span> 
