@@ -105,36 +105,39 @@ foreach ($localeMaster as $key => $value) {
      * @var array $activeLocaleCodes
      */
     $activeLocaleCodes = $config[ConfigConstants::LOCALES_ACTIVE];
-
     foreach ($activeLocaleCodes as $activeLocaleCode) {
 
         $correlation = $value[LocaleConstants::CORRELATION];
         $derivativeTable = $config[ConfigConstants::DERIVATIVE_TABLE];
         $derivationPatterns = $derivativeTable[$correlation];
 
+        $stringToFind = $localeMaster[$correlation][$activeLocaleCode];
+        $replacement = $value[$activeLocaleCode];
+
         // build replace array by replace derivateTable
 
         foreach ($derivationPatterns as $pattern) {
-            $findThis = str_replace('{string}', $localeMaster[$value['corr']][$activeLocaleCode], $pattern);
-            $replaceWith = str_replace('{string}', $value[$activeLocaleCode], $pattern);
-            $findReplaceData[] = array('f' => $findThis, 'r' => $replaceWith);
+            $findThis = str_replace('{string}', $stringToFind, $pattern);
+            $replaceWith = str_replace('{string}', $replacement, $pattern);
+
+            $findAndReplaceData[] = array('f' => $findThis, 'r' => $replaceWith);
         }
 
-        if (is_array($arr[$activeLocaleCode][$value['file']])) {
-            $arr[$activeLocaleCode][$value['file']] = array_merge($arr[$activeLocaleCode][$value['file']], $findReplaceData);
+        if (is_array($arr[$activeLocaleCode][$currentTargetFile])) {
+            $arr[$activeLocaleCode][$currentTargetFile] = array_merge($arr[$activeLocaleCode][$currentTargetFile], $findAndReplaceData);
         } else {
-            $arr[$activeLocaleCode][$value['file']] = $findReplaceData;
+            $arr[$activeLocaleCode][$currentTargetFile] = $findAndReplaceData;
         }
 
         echo("Replace 
-        <span><b>".$localeMaster[$value['corr']][$activeLocaleCode]."</b></span> 
+        <span><b>".$localeMaster[$correlation][$activeLocaleCode]."</b></span> 
         for 
         <span>".$activeLocaleCode." </span> 
         : 
-        <span>".count($findReplaceData)."</span> 
+        <span>".count($findAndReplaceData)."</span> 
         <br>\n");
 
-        unset($findReplaceData);
+        unset($findAndReplaceData);
 
     }
 }
