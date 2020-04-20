@@ -26,11 +26,11 @@ class PageRenderer
      */
     public function renderText(string $text): void
     {
-        if ($this->config->isVerbose()) {
+        if (false === $this->config->isVerbose()) {
             return;
         }
 
-        $this->renderText($text);
+        echo($text);
     }
 
     /**
@@ -38,7 +38,7 @@ class PageRenderer
      */
     public function renderHeader(): void
     {
-        $this->renderText(file_get_contents(__DIR__ . '\Theme\header.html'));
+        $this->renderText(file_get_contents(__DIR__ . '\Presentation\Theme\header.html'));
     }
 
     /**
@@ -46,7 +46,7 @@ class PageRenderer
      */
     public function renderFoot(): void
     {
-        $this->renderText(file_get_contents(__DIR__ . '\Theme\footer.html'));
+        $this->renderText(file_get_contents(__DIR__ . '\Presentation\Theme\footer.html'));
     }
 
     /**
