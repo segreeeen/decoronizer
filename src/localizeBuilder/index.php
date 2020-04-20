@@ -27,16 +27,12 @@ $replaceDataWithCorrelations = addCorrelations($replaceDataForLocales, $config);
 
 $pageRenderer->renderSeparatorLine();
 
-// create local-folder
-$outputPath = $config->getOutputPath();
-if (true === is_dir($outputPath)) {
-    deleteDir($outputPath);
-}
-mkdir($outputPath,0777);
+createLocaleFolder($config);
 
 //print_r($arr);
 
 $msgMaster = file_get_contents($config->getMsgMasterPath());
+$outputPath = $config->getOutputPath();
 $destinationPath = $config->getMsgDestinationPath();
 foreach ($replaceDataWithCorrelations as $localeFolderName => $fileContents) {
     
@@ -167,6 +163,22 @@ function addCorrelations(array $replaceDataForLocales, Config $config): array
     }
 
     return $replaceDataWithCorrelations;
+}
+
+/**
+ * @param Config $config
+ *
+ * @return void
+ */
+function createLocaleFolder(Config $config): void
+{
+    $outputPath = $config->getOutputPath();
+
+    if (true === is_dir($outputPath)) {
+        deleteDir($outputPath);
+    }
+
+    mkdir($outputPath,0777);
 }
 
 /**
