@@ -19,66 +19,19 @@ $localeMaster = $masterProcessor->processLocaleMaster($config);
 
 $pageRenderer = new PageRenderer();
 
-$pageRenderer->renderHead();
+$pageRenderer->renderHeader();
 
-$arr = [];
-$lastTargetFile = '';
-foreach ($localeMaster as $key => $value) {
- 
-    if (isCorrelated($value)) {
-        continue;
-    }
+$replaceDataForLocales = composeReplaceDataForLocales($localeMaster, $pageRenderer, $config);
 
-    /**
-     * @var string $currentTargetFile
-     */
-    $currentTargetFile = $value[LocaleConstants::FOR_FILE];
-
-    if (isNewFile($currentTargetFile, $lastTargetFile)) {
-        $processingNewFileHeader = sprintf('--- %s.json ---<br>', $currentTargetFile);
-        $pageRenderer->renderText($processingNewFileHeader);
-
-        $lastTargetFile = $currentTargetFile;
-    }
-
-    /**
-     * @var array $activeLocaleCodes
-     */
-    $activeLocaleCodes = $config->getActiveLocales();
-    foreach ($activeLocaleCodes as $activeLocaleCode) {
-
-        $correlation = $value[LocaleConstants::CORRELATION];
-        $derivativeTable = $config->getDerivativeTable();
-        $derivationPatterns = $derivativeTable[$correlation];
-
-        $stringToFind = $localeMaster[$correlation][$activeLocaleCode];
-        $replacement = $value[$activeLocaleCode];
-
-        $findAndReplaceData = composeFindAndReplaceData($derivationPatterns, $stringToFind, $replacement);
-
-        if (isset($arr[$activeLocaleCode][$currentTargetFile])) {
-            $arr[$activeLocaleCode][$currentTargetFile] = array_merge($arr[$activeLocaleCode][$currentTargetFile], $findAndReplaceData);
-        } else {
-            $arr[$activeLocaleCode][$currentTargetFile] = $findAndReplaceData;
-        }
-
-        $pageRenderer->renderReplaceInfo(
-            $localeMaster[$correlation][$activeLocaleCode],
-            $activeLocaleCode,
-            count($findAndReplaceData)
-        );
-    }
-}
-
-// Add Local Correlations (en-US etc.)
+// Add Locale Correlations (en-US etc.)
 $localeCorrelations = $config->getLocaleCorrelations();
 $temp_arr = [];
 
 foreach ($localeCorrelations as $localeCorrelation => $base) {
-    $temp_arr[$localeCorrelation] = $arr[$base];
+    $temp_arr[$localeCorrelation] = $replaceDataForLocales[$base];
 }
 
-$arr = $temp_arr;
+$replaceDataWithCorrelations = $temp_arr;
 
 echo("<hr>");
 
@@ -93,31 +46,96 @@ mkdir($outputPath,0777);
 
 $msgMaster = file_get_contents($config->getMsgMasterPath());
 $destinationPath = $config->getMsgDestinationPath();
-foreach ($arr as $localeFolderName => $fileContents) {
+foreach ($replaceDataWithCorrelations as $localeFolderName => $fileContents) {
     
-    $path = $outputPath."/".$localeFolderName;
-    echo("<hr>");
-    echo("Write Folder ".$path ."<br>");
-    mkdir($path,0777);
+    $folderPath = $outputPath."/".$localeFolderName;
+    $pageRenderer->renderWriteFolderInfo($folderPath);
+    mkdir($folderPath,0777);
     
     $localeMessageContent = str_replace('{string}',$localeFolderName,$msgMaster);
-    file_put_contents($path."/".$destinationPath,$localeMessageContent);
-    echo("Write file " . $destinationPath . "<br>");
+    file_put_contents($folderPath."/".$destinationPath,$localeMessageContent);
+    $pageRenderer->renderWriteFileInfo($destinationPath);
 
     foreach ($fileContents as $fileBaseName => $content) {
         
-        $filename = $path."/".$fileBaseName.".json";
-        $json = escape_sequence_decode(build_json($arr[$localeFolderName][$fileBaseName]));
-        echo("Write file ".$filename ."<br>");
+        $filename = $folderPath."/".$fileBaseName.".json";
+        $json = escape_sequence_decode(build_json($replaceDataWithCorrelations[$localeFolderName][$fileBaseName]));
+        $pageRenderer->renderWriteFileInfo($filename);
         file_put_contents($filename,$json);
         
     }
 
 }
 
-echo("<hr>");
-echo("DONE<br>");
-echo('</body></html>');
+$pageRenderer->renderFoot();
+
+
+/**
+ * @param array $localeMaster
+ * @param PageRenderer $pageRenderer
+ * @param Config $config
+ *
+ * @return array
+ */
+function composeReplaceDataForLocales(
+    array $localeMaster,
+    PageRenderer $pageRenderer,
+    Config $config
+): array {
+    $replaceDataForLocales = [];
+    $lastTargetFile = '';
+
+    foreach ($localeMaster as $key => $value) {
+
+        if (isCorrelated($value)) {
+            continue;
+        }
+
+        /**
+         * @var string $currentTargetFile
+         */
+        $currentTargetFile = $value[LocaleConstants::FOR_FILE];
+
+        if (isNewFile($currentTargetFile, $lastTargetFile)) {
+            $pageRenderer->renderNewFileInfo($currentTargetFile);
+
+            $lastTargetFile = $currentTargetFile;
+        }
+
+        /**
+         * @var array $activeLocaleCodes
+         */
+        $activeLocaleCodes = $config->getActiveLocales();
+        foreach ($activeLocaleCodes as $activeLocaleCode) {
+
+            $correlation = $value[LocaleConstants::CORRELATION];
+            $derivativeTable = $config->getDerivativeTable();
+            $derivationPatterns = $derivativeTable[$correlation];
+
+            $stringToFind = $localeMaster[$correlation][$activeLocaleCode];
+            $replacement = $value[$activeLocaleCode];
+
+            $findAndReplaceData = composeReplaceData($derivationPatterns, $stringToFind, $replacement);
+
+            if (isset($replaceDataForLocales[$activeLocaleCode][$currentTargetFile])) {
+                $replaceDataForLocales[$activeLocaleCode][$currentTargetFile] = array_merge(
+                    $replaceDataForLocales[$activeLocaleCode][$currentTargetFile],
+                    $findAndReplaceData
+                );
+            } else {
+                $replaceDataForLocales[$activeLocaleCode][$currentTargetFile] = $findAndReplaceData;
+            }
+
+            $pageRenderer->renderReplaceInfo(
+                $localeMaster[$correlation][$activeLocaleCode],
+                $activeLocaleCode,
+                count($findAndReplaceData)
+            );
+        }
+    }
+
+    return $replaceDataForLocales;
+}
 
 
 /**
@@ -127,18 +145,18 @@ echo('</body></html>');
  *
  * @return array
  */
-function composeFindAndReplaceData(array $derivationPatterns, string $stringToFind, string $replacement): array
+function composeReplaceData(array $derivationPatterns, string $stringToFind, string $replacement): array
 {
-    $findAndReplaceData = [];
+    $replaceData = [];
 
     foreach ($derivationPatterns as $pattern) {
         $findThis = str_replace('{string}', $stringToFind, $pattern);
         $replaceWith = str_replace('{string}', $replacement, $pattern);
 
-        $findAndReplaceData[] = array('f' => $findThis, 'r' => $replaceWith);
+        $replaceData[] = array('f' => $findThis, 'r' => $replaceWith);
     }
 
-    return $findAndReplaceData;
+    return $replaceData;
 }
 
 /**
