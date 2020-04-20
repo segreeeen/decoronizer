@@ -1,14 +1,22 @@
 <?php
+
 // http://localhost/chrome/decoronizer/src/localizeBuilder/index.php
 
-require_once('ConfigConstants.php');
-require_once('LocaleConstants.php');
+namespace LocalizationDataBuilder;
 
-require_once('Config.php');
+use LocalizationDataBuilder\Business\LocaleConstants;
+use LocalizationDataBuilder\Business\MasterProcessor;
+use LocalizationDataBuilder\Config\Config;
+use LocalizationDataBuilder\Communication\PageRenderer;
 
-require_once('MasterProcessor.php');
+require_once('Config\ConfigConstants.php');
+require_once('Business\LocaleConstants.php');
 
-require_once('PageRenderer.php');
+require_once('Config\Config.php');
+
+require_once('Business\MasterProcessor.php');
+
+require_once('Communication\PageRenderer.php');
 
 $config = buildConfig();
 
@@ -35,7 +43,7 @@ $pageRenderer->renderFoot();
  */
 function buildConfig(): Config
 {
-    include('config_default.php');
+    include('Config\config_default.php');
 
     /** @var array $config */
     return new Config($config);

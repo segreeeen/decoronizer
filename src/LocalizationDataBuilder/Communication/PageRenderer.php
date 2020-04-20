@@ -1,14 +1,18 @@
 <?php
 
+namespace LocalizationDataBuilder\Communication;
+
+use LocalizationDataBuilder\Config\Config;
+
 class PageRenderer
 {
     /**
-     * @var Config $config
+     * @var \LocalizationDataBuilder\Config\Config $config
      */
     protected $config;
 
     /**
-     * @param Config $config
+     * @param \LocalizationDataBuilder\Config\Config $config
      */
     public function __construct(Config $config)
     {
@@ -22,7 +26,7 @@ class PageRenderer
      */
     public function renderText(string $text): void
     {
-        if (false === $this->config->isVerbose()) {
+        if ($this->config->isVerbose()) {
             return;
         }
 
@@ -34,7 +38,7 @@ class PageRenderer
      */
     public function renderHeader(): void
     {
-        $this->renderText(file_get_contents('header.html'));
+        $this->renderText(file_get_contents(__DIR__ . '\Theme\header.html'));
     }
 
     /**
@@ -42,7 +46,7 @@ class PageRenderer
      */
     public function renderFoot(): void
     {
-        $this->renderText(file_get_contents('footer.html'));
+        $this->renderText(file_get_contents(__DIR__ . '\Theme\footer.html'));
     }
 
     /**

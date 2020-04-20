@@ -1,10 +1,12 @@
 <?php
+    use LocalizationDataBuilder\Config\ConfigConstants;
+
     $config[ConfigConstants::PATH_OUTPUT] = '_locales';
     $config[ConfigConstants::PATH_SOURCE_CSV] = 'locale_master.csv';
     $config[ConfigConstants::PATH_MSG_MASTER] = 'message_master.json';
     $config[ConfigConstants::PATH_MSG_DESTINATION] = 'messages.json';
 
-    $config[ConfigConstants::VERBOSE_MODE] = false;
+    $config[ConfigConstants::VERBOSE_MODE] = true;
 
     $config[ConfigConstants::LOCALES_ACTIVE] = [
         'en',

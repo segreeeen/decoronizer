@@ -1,9 +1,13 @@
 <?php
 
+namespace LocalizationDataBuilder\Business;
+
+use LocalizationDataBuilder\Config\Config;
+
 class MasterProcessor
 {
     /**
-     * @param Config $config
+     * @param \LocalizationDataBuilder\Config\Config $config
      *
      * @return array
      */
@@ -17,7 +21,7 @@ class MasterProcessor
     }
 
     /**
-     * @param Config $config
+     * @param \LocalizationDataBuilder\Config\Config $config
      *
      * @return array
      */

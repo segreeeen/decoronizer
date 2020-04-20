@@ -1,5 +1,7 @@
 <?php
 
+namespace LocalizationDataBuilder\Config;
+
 class ConfigConstants
 {
     public const PATH_OUTPUT = 'PATH_OUTPUT';

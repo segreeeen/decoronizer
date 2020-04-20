@@ -1,5 +1,7 @@
 <?php
 
+namespace LocalizationDataBuilder\Config;
+
 class Config
 {
     /**

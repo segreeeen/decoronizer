@@ -1,5 +1,7 @@
 <?php
 
+namespace LocalizationDataBuilder\Business;
+
 class LocaleConstants
 {
     public const ID_TEXT = 'id';
