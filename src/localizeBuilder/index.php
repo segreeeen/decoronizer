@@ -10,20 +10,18 @@ require_once('config_default.php');
 
 require_once('MasterProcessor.php');
 
+require_once('PageRenderer.php');
+
 $config = new Config($config);
 $masterProcessor = new MasterProcessor();
 
 $localeMaster = $masterProcessor->processLocaleMaster($config);
 
-echo('<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Localize-Builder</title>
-</head>
-<body>');
+$pageRenderer = new PageRenderer();
 
+$pageRenderer->renderHead();
+
+$arr = [];
 $lastTargetFile = '';
 foreach ($localeMaster as $key => $value) {
  
@@ -38,7 +36,7 @@ foreach ($localeMaster as $key => $value) {
 
     if (isNewFile($currentTargetFile, $lastTargetFile)) {
         $processingNewFileHeader = sprintf('--- %s.json ---<br>', $currentTargetFile);
-        echo($processingNewFileHeader);
+        $pageRenderer->renderText($processingNewFileHeader);
 
         $lastTargetFile = $currentTargetFile;
     }
@@ -56,72 +54,20 @@ foreach ($localeMaster as $key => $value) {
         $stringToFind = $localeMaster[$correlation][$activeLocaleCode];
         $replacement = $value[$activeLocaleCode];
 
-        // build replace array by replace derivateTable
-
         $findAndReplaceData = composeFindAndReplaceData($derivationPatterns, $stringToFind, $replacement);
 
-        if (is_array($arr[$activeLocaleCode][$currentTargetFile])) {
+        if (isset($arr[$activeLocaleCode][$currentTargetFile])) {
             $arr[$activeLocaleCode][$currentTargetFile] = array_merge($arr[$activeLocaleCode][$currentTargetFile], $findAndReplaceData);
         } else {
             $arr[$activeLocaleCode][$currentTargetFile] = $findAndReplaceData;
         }
 
-        echo("Replace 
-        <span><b>".$localeMaster[$correlation][$activeLocaleCode]."</b></span> 
-        for 
-        <span>".$activeLocaleCode." </span> 
-        : 
-        <span>".count($findAndReplaceData)."</span> 
-        <br>\n");
-
-        unset($findAndReplaceData);
-
+        $pageRenderer->renderReplaceInfo(
+            $localeMaster[$correlation][$activeLocaleCode],
+            $activeLocaleCode,
+            count($findAndReplaceData)
+        );
     }
-}
-
-/**
- * @param array $derivationPatterns
- * @param string $stringToFind
- * @param string $replacement
- *
- * @return array
- */
-function composeFindAndReplaceData(array $derivationPatterns, string $stringToFind, string $replacement): array
-{
-    $findAndReplaceData = [];
-
-    foreach ($derivationPatterns as $pattern) {
-        $findThis = str_replace('{string}', $stringToFind, $pattern);
-        $replaceWith = str_replace('{string}', $replacement, $pattern);
-
-        $findAndReplaceData[] = array('f' => $findThis, 'r' => $replaceWith);
-    }
-
-    return $findAndReplaceData;
-}
-
-/**
- * @param array $value
- *
- * @return bool
- */
-function isCorrelated(array $value): bool
-{
-    $id = $value[LocaleConstants::ID_TEXT];
-    $correlation = $value[LocaleConstants::CORRELATION];
-
-    return $id === $correlation;
-}
-
-/**
- * @param string $currentTargetFile
- * @param string $lastTargetFile
- *
- * @return bool
- */
-function isNewFile(string $currentTargetFile, string $lastTargetFile): bool
-{
-    return $currentTargetFile != $lastTargetFile;
 }
 
 // Add Local Correlations (en-US etc.)
@@ -171,7 +117,63 @@ foreach ($arr as $localeFolderName => $fileContents) {
 
 echo("<hr>");
 echo("DONE<br>");
+echo('</body></html>');
 
+
+/**
+ * @param array $derivationPatterns
+ * @param string $stringToFind
+ * @param string $replacement
+ *
+ * @return array
+ */
+function composeFindAndReplaceData(array $derivationPatterns, string $stringToFind, string $replacement): array
+{
+    $findAndReplaceData = [];
+
+    foreach ($derivationPatterns as $pattern) {
+        $findThis = str_replace('{string}', $stringToFind, $pattern);
+        $replaceWith = str_replace('{string}', $replacement, $pattern);
+
+        $findAndReplaceData[] = array('f' => $findThis, 'r' => $replaceWith);
+    }
+
+    return $findAndReplaceData;
+}
+
+/**
+ * @param array $value
+ *
+ * @return bool
+ */
+function isCorrelated(array $value): bool
+{
+    $id = $value[LocaleConstants::ID_TEXT];
+    $correlation = $value[LocaleConstants::CORRELATION];
+
+    return $id === $correlation;
+}
+
+/**
+ * @param string $currentTargetFile
+ * @param string $lastTargetFile
+ *
+ * @return bool
+ */
+function isNewFile(string $currentTargetFile, string $lastTargetFile): bool
+{
+    return $currentTargetFile != $lastTargetFile;
+}
+
+/**
+ * @param string $path
+ *
+ * @return bool
+ */
+function hasTrailingSlash(string $path): bool
+{
+    return substr($path, -1) === '/';
+}
 
 function escape_sequence_decode(string $str) {
 
@@ -210,7 +212,6 @@ function escape_sequence_decode(string $str) {
     }, $str);
 }
 
-
 function build_json ($dataToEncode='')
 {
     if (true === is_array($dataToEncode)) {
@@ -221,7 +222,6 @@ function build_json ($dataToEncode='')
         );
     }
 }
-
 
 /**
  * @param string $dirPath
@@ -249,15 +249,3 @@ function deleteDir(string $dirPath): void
     }
     rmdir($dirPath);
 }
-
-/**
- * @param string $path
- *
- * @return bool
- */
-function hasTrailingSlash(string $path): bool
-{
-    return substr($path, -1) === '/';
-}
-
-echo('</body></html>');
