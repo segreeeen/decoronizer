@@ -1,21 +1,25 @@
 <?php
-require_once('ConfigConstants.php');
-require_once('LocaleConstants.php');
-
-require_once('config_default.php');
 
 // http://localhost/chrome/decoronizer/src/localizeBuilder/index.php
 
-$msgMaster = file_get_contents($config[ConfigConstants::PATH_MSG_MASTER]);
+require_once('ConfigConstants.php');
+require_once('LocaleConstants.php');
+
+require_once('Config.php');
+require_once('config_default.php');
+
+$config = new Config($config);
+
+$msgMaster = file_get_contents($config->getMsgMasterPath());
 
 $localeMaster = processLocaleMaster($config);
 
 /**
- * @param array $config
+ * @param Config $config
  *
  * @return array
  */
-function processLocaleMaster(array $config): array
+function processLocaleMaster(Config $config): array
 {
     $localeMaster = loadLocaleMasterData($config);
     $localeMaster = processLocaleMasterData($localeMaster);
@@ -25,15 +29,15 @@ function processLocaleMaster(array $config): array
 }
 
 /**
- * @param array $config
+ * @param Config $config
  *
  * @return array
  */
-function loadLocaleMasterData(array $config): array
+function loadLocaleMasterData(Config $config): array
 {
     $localeMaster = array_map(
         'str_getcsv',
-        file($config[ConfigConstants::PATH_SOURCE_CSV])
+        file($config->getSourceCsvPath())
     );
 
     return $localeMaster;
@@ -64,7 +68,7 @@ function rebuildWithIdKeys(array $localeMaster): array
     $localeMasterIdKeys = [];
 
     foreach ($localeMaster as $item) {
-        $id = $item['id'];
+        $id = $item[LocaleConstants::ID_TEXT];
         $localeMasterIdKeys[$id] = $item;
     }
 
@@ -102,11 +106,11 @@ foreach ($localeMaster as $key => $value) {
     /**
      * @var array $activeLocaleCodes
      */
-    $activeLocaleCodes = $config[ConfigConstants::LOCALES_ACTIVE];
+    $activeLocaleCodes = $config->getActiveLocales();
     foreach ($activeLocaleCodes as $activeLocaleCode) {
 
         $correlation = $value[LocaleConstants::CORRELATION];
-        $derivativeTable = $config[ConfigConstants::DERIVATIVE_TABLE];
+        $derivativeTable = $config->getDerivativeTable();
         $derivationPatterns = $derivativeTable[$correlation];
 
         $stringToFind = $localeMaster[$correlation][$activeLocaleCode];
@@ -165,7 +169,7 @@ function isNewFile(string $currentTargetFile, string $lastTargetFile): bool
 }
 
 // Add Local Correlations (en-US etc.)
-$localeCorrelations = $config[ConfigConstants::LOCALE_CORRELATIONS];
+$localeCorrelations = $config->getLocaleCorrelations();
 $temp_arr = [];
 
 foreach ($localeCorrelations as $localeCorrelation => $base) {
@@ -177,23 +181,25 @@ $arr = $temp_arr;
 echo("<hr>");
 
 // create local-folder
-if (true === is_dir($config[ConfigConstants::PATH_OUTPUT])) {
-    deleteDir($config[ConfigConstants::PATH_OUTPUT]);
+$outputPath = $config->getOutputPath();
+if (true === is_dir($outputPath)) {
+    deleteDir($outputPath);
 }
-mkdir($config[ConfigConstants::PATH_OUTPUT],0777);
+mkdir($outputPath,0777);
 
 //print_r($arr);
 
+$destinationPath = $config->getMsgDestinationPath();
 foreach ($arr as $localeFolderName => $fileContents) {
     
-    $path = $config[ConfigConstants::PATH_OUTPUT]."/".$localeFolderName;
+    $path = $outputPath."/".$localeFolderName;
     echo("<hr>");
     echo("Write Folder ".$path ."<br>");
     mkdir($path,0777);
     
     $localeMessageContent = str_replace('{string}',$localeFolderName,$msgMaster);
-    file_put_contents($path."/".$config[ConfigConstants::PATH_MSG_DESTINATION],$localeMessageContent);
-    echo("Write file ".$config[ConfigConstants::PATH_MSG_DESTINATION] ."<br>");
+    file_put_contents($path."/".$destinationPath,$localeMessageContent);
+    echo("Write file " . $destinationPath . "<br>");
 
     foreach ($fileContents as $fileBaseName => $content) {
         
