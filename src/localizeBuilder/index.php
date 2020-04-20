@@ -1,12 +1,3 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Localize-Builder</title>
-</head>
-<body>
-
 <?php
 require_once('ConfigConstants.php');
 require_once('LocaleConstants.php');
@@ -80,7 +71,14 @@ function rebuildWithIdKeys(array $localeMaster): array
     return $localeMasterIdKeys;
 }
 
-// build structure
+echo('<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Localize-Builder</title>
+</head>
+<body>');
 
 $lastTargetFile = '';
 foreach ($localeMaster as $key => $value) {
@@ -211,9 +209,8 @@ foreach ($arr as $localeFolderName => $fileContents) {
 echo("<hr>");
 echo("DONE<br>");
 
-    // --------------------------------------------------------------------------------------
 
-function escape_sequence_decode($str) {
+function escape_sequence_decode(string $str) {
 
     // [U+D800 - U+DBFF][U+DC00 - U+DFFF]|[U+0000 - U+FFFF]
     $regex = '/\\\u([dD][89abAB][\da-fA-F]{2})\\\u([dD][c-fC-F][\da-fA-F]{2})
@@ -251,10 +248,8 @@ function escape_sequence_decode($str) {
 }
 
 
-// --------------------------------------------------------------------------------------
-function build_json ($dataToEncode='') {
-
-    
+function build_json ($dataToEncode='')
+{
     if (true === is_array($dataToEncode)) {
         return json_encode(
                 $dataToEncode,
@@ -262,12 +257,16 @@ function build_json ($dataToEncode='') {
                 JSON_UNESCAPED_UNICODE
         );
     }
-
 }
 
 
-// --------------------------------------------------------------------------------------
-function deleteDir($dirPath) {
+/**
+ * @param string $dirPath
+ *
+ * @return void
+ */
+function deleteDir(string $dirPath): void
+{
     if (false === is_dir($dirPath)) {
         throw new InvalidArgumentException("$dirPath must be a directory.");
     }
@@ -287,16 +286,15 @@ function deleteDir($dirPath) {
     }
     rmdir($dirPath);
 }
-// --------------------------------------------------------------------------------------
 
+/**
+ * @param string $path
+ *
+ * @return bool
+ */
 function hasTrailingSlash(string $path): bool
 {
     return substr($path, -1) === '/';
 }
 
-?>
-
-
-
-  </body>
-</html>
+echo('</body></html>');
