@@ -1,5 +1,4 @@
 <?php
-
 // http://localhost/chrome/decoronizer/src/localizeBuilder/index.php
 
 require_once('ConfigConstants.php');
@@ -21,39 +20,13 @@ $pageRenderer = new PageRenderer();
 
 $pageRenderer->renderHeader();
 
-$replaceDataForLocales = composeReplaceDataForLocales($localeMaster, $pageRenderer, $config);
+$replacementDataForLocales = composeReplaceDataForLocales($localeMaster, $pageRenderer, $config);
 
-$replaceDataWithCorrelations = addCorrelations($replaceDataForLocales, $config);
+$replacementDataWithCorrelations = addCorrelations($replacementDataForLocales, $config);
 
 $pageRenderer->renderSeparatorLine();
 
-createLocaleFolder($config);
-
-//print_r($arr);
-
-$msgMaster = file_get_contents($config->getMsgMasterPath());
-$outputPath = $config->getOutputPath();
-$destinationPath = $config->getMsgDestinationPath();
-foreach ($replaceDataWithCorrelations as $localeFolderName => $fileContents) {
-    
-    $folderPath = $outputPath."/".$localeFolderName;
-    $pageRenderer->renderWriteFolderInfo($folderPath);
-    mkdir($folderPath,0777);
-    
-    $localeMessageContent = str_replace('{string}',$localeFolderName,$msgMaster);
-    file_put_contents($folderPath."/".$destinationPath,$localeMessageContent);
-    $pageRenderer->renderWriteFileInfo($destinationPath);
-
-    foreach ($fileContents as $fileBaseName => $content) {
-        
-        $filename = $folderPath."/".$fileBaseName.".json";
-        $json = escape_sequence_decode(build_json($replaceDataWithCorrelations[$localeFolderName][$fileBaseName]));
-        $pageRenderer->renderWriteFileInfo($filename);
-        file_put_contents($filename,$json);
-        
-    }
-
-}
+writeOutFiles($replacementDataWithCorrelations, $pageRenderer, $config);
 
 $pageRenderer->renderFoot();
 
@@ -70,7 +43,7 @@ function composeReplaceDataForLocales(
     PageRenderer $pageRenderer,
     Config $config
 ): array {
-    $replaceDataForLocales = [];
+    $replacementDataForLocales = [];
     $lastTargetFile = '';
 
     foreach ($localeMaster as $key => $value) {
@@ -105,13 +78,13 @@ function composeReplaceDataForLocales(
 
             $findAndReplaceData = composeReplaceData($derivationPatterns, $stringToFind, $replacement);
 
-            if (isset($replaceDataForLocales[$activeLocaleCode][$currentTargetFile])) {
-                $replaceDataForLocales[$activeLocaleCode][$currentTargetFile] = array_merge(
-                    $replaceDataForLocales[$activeLocaleCode][$currentTargetFile],
+            if (isset($replacementDataForLocales[$activeLocaleCode][$currentTargetFile])) {
+                $replacementDataForLocales[$activeLocaleCode][$currentTargetFile] = array_merge(
+                    $replacementDataForLocales[$activeLocaleCode][$currentTargetFile],
                     $findAndReplaceData
                 );
             } else {
-                $replaceDataForLocales[$activeLocaleCode][$currentTargetFile] = $findAndReplaceData;
+                $replacementDataForLocales[$activeLocaleCode][$currentTargetFile] = $findAndReplaceData;
             }
 
             $pageRenderer->renderReplaceInfo(
@@ -122,7 +95,7 @@ function composeReplaceDataForLocales(
         }
     }
 
-    return $replaceDataForLocales;
+    return $replacementDataForLocales;
 }
 
 
@@ -135,50 +108,34 @@ function composeReplaceDataForLocales(
  */
 function composeReplaceData(array $derivationPatterns, string $stringToFind, string $replacement): array
 {
-    $replaceData = [];
+    $replacementData = [];
 
     foreach ($derivationPatterns as $pattern) {
         $findThis = str_replace('{string}', $stringToFind, $pattern);
         $replaceWith = str_replace('{string}', $replacement, $pattern);
 
-        $replaceData[] = array('f' => $findThis, 'r' => $replaceWith);
+        $replacementData[] = array('f' => $findThis, 'r' => $replaceWith);
     }
 
-    return $replaceData;
+    return $replacementData;
 }
 
 /**
- * @param array $replaceDataForLocales
+ * @param array $replacementDataForLocales
  * @param Config $config
  *
  * @return array
  */
-function addCorrelations(array $replaceDataForLocales, Config $config): array
+function addCorrelations(array $replacementDataForLocales, Config $config): array
 {
     $localeCorrelations = $config->getLocaleCorrelations();
-    $replaceDataWithCorrelations = [];
+    $replacementDataWithCorrelations = [];
 
     foreach ($localeCorrelations as $localeCorrelation => $base) {
-        $replaceDataWithCorrelations[$localeCorrelation] = $replaceDataForLocales[$base];
+        $replacementDataWithCorrelations[$localeCorrelation] = $replacementDataForLocales[$base];
     }
 
-    return $replaceDataWithCorrelations;
-}
-
-/**
- * @param Config $config
- *
- * @return void
- */
-function createLocaleFolder(Config $config): void
-{
-    $outputPath = $config->getOutputPath();
-
-    if (true === is_dir($outputPath)) {
-        deleteDir($outputPath);
-    }
-
-    mkdir($outputPath,0777);
+    return $replacementDataWithCorrelations;
 }
 
 /**
@@ -206,13 +163,56 @@ function isNewFile(string $currentTargetFile, string $lastTargetFile): bool
 }
 
 /**
- * @param string $path
+ * @param array $replacementDataWithCorrelations
+ * @param PageRenderer $pageRenderer
+ * @param Config $config
  *
- * @return bool
+ * @return void
  */
-function hasTrailingSlash(string $path): bool
+function writeOutFiles(array $replacementDataWithCorrelations, PageRenderer $pageRenderer, Config $config): void
 {
-    return substr($path, -1) === '/';
+    createLocaleFolder($config);
+
+    $msgMaster = file_get_contents($config->getMsgMasterPath());
+    $outputPath = $config->getOutputPath();
+    $destinationPath = $config->getMsgDestinationPath();
+
+    foreach ($replacementDataWithCorrelations as $localeFolderName => $fileContents) {
+
+        $folderPath = $outputPath."/".$localeFolderName;
+        $pageRenderer->renderWriteFolderInfo($folderPath);
+        mkdir($folderPath,0777);
+
+        $localeMessageContent = str_replace('{string}',$localeFolderName,$msgMaster);
+        file_put_contents($folderPath."/".$destinationPath,$localeMessageContent);
+        $pageRenderer->renderWriteFileInfo($destinationPath);
+
+        foreach ($fileContents as $fileBaseName => $content) {
+
+            $filename = $folderPath."/".$fileBaseName.".json";
+            $json = escape_sequence_decode(build_json($replacementDataWithCorrelations[$localeFolderName][$fileBaseName]));
+            $pageRenderer->renderWriteFileInfo($filename);
+            file_put_contents($filename,$json);
+
+        }
+
+    }
+}
+
+/**
+ * @param Config $config
+ *
+ * @return void
+ */
+function createLocaleFolder(Config $config): void
+{
+    $outputPath = $config->getOutputPath();
+
+    if (true === is_dir($outputPath)) {
+        deleteDir($outputPath);
+    }
+
+    mkdir($outputPath,0777);
 }
 
 function escape_sequence_decode(string $str) {
@@ -288,4 +288,14 @@ function deleteDir(string $dirPath): void
         }
     }
     rmdir($dirPath);
+}
+
+/**
+ * @param string $path
+ *
+ * @return bool
+ */
+function hasTrailingSlash(string $path): bool
+{
+    return substr($path, -1) === '/';
 }
