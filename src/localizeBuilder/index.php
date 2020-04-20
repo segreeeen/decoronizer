@@ -58,12 +58,7 @@ foreach ($localeMaster as $key => $value) {
 
         // build replace array by replace derivateTable
 
-        foreach ($derivationPatterns as $pattern) {
-            $findThis = str_replace('{string}', $stringToFind, $pattern);
-            $replaceWith = str_replace('{string}', $replacement, $pattern);
-
-            $findAndReplaceData[] = array('f' => $findThis, 'r' => $replaceWith);
-        }
+        $findAndReplaceData = composeFindAndReplaceData($derivationPatterns, $stringToFind, $replacement);
 
         if (is_array($arr[$activeLocaleCode][$currentTargetFile])) {
             $arr[$activeLocaleCode][$currentTargetFile] = array_merge($arr[$activeLocaleCode][$currentTargetFile], $findAndReplaceData);
@@ -82,6 +77,27 @@ foreach ($localeMaster as $key => $value) {
         unset($findAndReplaceData);
 
     }
+}
+
+/**
+ * @param array $derivationPatterns
+ * @param string $stringToFind
+ * @param string $replacement
+ *
+ * @return array
+ */
+function composeFindAndReplaceData(array $derivationPatterns, string $stringToFind, string $replacement): array
+{
+    $findAndReplaceData = [];
+
+    foreach ($derivationPatterns as $pattern) {
+        $findThis = str_replace('{string}', $stringToFind, $pattern);
+        $replaceWith = str_replace('{string}', $replacement, $pattern);
+
+        $findAndReplaceData[] = array('f' => $findThis, 'r' => $replaceWith);
+    }
+
+    return $findAndReplaceData;
 }
 
 /**
