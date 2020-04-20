@@ -8,72 +8,12 @@ require_once('LocaleConstants.php');
 require_once('Config.php');
 require_once('config_default.php');
 
+require_once('MasterProcessor.php');
+
 $config = new Config($config);
+$masterProcessor = new MasterProcessor();
 
-$msgMaster = file_get_contents($config->getMsgMasterPath());
-
-$localeMaster = processLocaleMaster($config);
-
-/**
- * @param Config $config
- *
- * @return array
- */
-function processLocaleMaster(Config $config): array
-{
-    $localeMaster = loadLocaleMasterData($config);
-    $localeMaster = processLocaleMasterData($localeMaster);
-    $localeMaster = rebuildWithIdKeys($localeMaster);
-
-    return $localeMaster;
-}
-
-/**
- * @param Config $config
- *
- * @return array
- */
-function loadLocaleMasterData(Config $config): array
-{
-    $localeMaster = array_map(
-        'str_getcsv',
-        file($config->getSourceCsvPath())
-    );
-
-    return $localeMaster;
-}
-
-/**
- * @param array $localeMaster
- *
- * @return array
- */
-function processLocaleMasterData(array $localeMaster): array
-{
-    array_walk($localeMaster, function(&$a) use ($localeMaster) {
-        $a = array_combine($localeMaster[0], $a);
-    });
-    array_shift($localeMaster); # remove column header
-
-    return $localeMaster;
-}
-
-/**
- * @param array $localeMaster
- *
- * @return array
- */
-function rebuildWithIdKeys(array $localeMaster): array
-{
-    $localeMasterIdKeys = [];
-
-    foreach ($localeMaster as $item) {
-        $id = $item[LocaleConstants::ID_TEXT];
-        $localeMasterIdKeys[$id] = $item;
-    }
-
-    return $localeMasterIdKeys;
-}
+$localeMaster = $masterProcessor->processLocaleMaster($config);
 
 echo('<!DOCTYPE html>
 <html lang="de">
@@ -189,6 +129,7 @@ mkdir($outputPath,0777);
 
 //print_r($arr);
 
+$msgMaster = file_get_contents($config->getMsgMasterPath());
 $destinationPath = $config->getMsgDestinationPath();
 foreach ($arr as $localeFolderName => $fileContents) {
     
