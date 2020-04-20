@@ -23,17 +23,9 @@ $pageRenderer->renderHeader();
 
 $replaceDataForLocales = composeReplaceDataForLocales($localeMaster, $pageRenderer, $config);
 
-// Add Locale Correlations (en-US etc.)
-$localeCorrelations = $config->getLocaleCorrelations();
-$temp_arr = [];
+$replaceDataWithCorrelations = addCorrelations($replaceDataForLocales, $config);
 
-foreach ($localeCorrelations as $localeCorrelation => $base) {
-    $temp_arr[$localeCorrelation] = $replaceDataForLocales[$base];
-}
-
-$replaceDataWithCorrelations = $temp_arr;
-
-echo("<hr>");
+$pageRenderer->renderSeparatorLine();
 
 // create local-folder
 $outputPath = $config->getOutputPath();
@@ -157,6 +149,24 @@ function composeReplaceData(array $derivationPatterns, string $stringToFind, str
     }
 
     return $replaceData;
+}
+
+/**
+ * @param array $replaceDataForLocales
+ * @param Config $config
+ *
+ * @return array
+ */
+function addCorrelations(array $replaceDataForLocales, Config $config): array
+{
+    $localeCorrelations = $config->getLocaleCorrelations();
+    $replaceDataWithCorrelations = [];
+
+    foreach ($localeCorrelations as $localeCorrelation => $base) {
+        $replaceDataWithCorrelations[$localeCorrelation] = $replaceDataForLocales[$base];
+    }
+
+    return $replaceDataWithCorrelations;
 }
 
 /**

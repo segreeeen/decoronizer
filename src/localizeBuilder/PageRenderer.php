@@ -29,6 +29,14 @@ class PageRenderer
     }
 
     /**
+     * @return void
+     */
+    public function renderSeparatorLine(): void
+    {
+        echo("<hr>");
+    }
+
+    /**
      * @param string $currentTargetFile
      * *
      * @return void
