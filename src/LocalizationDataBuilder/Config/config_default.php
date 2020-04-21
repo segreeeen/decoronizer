@@ -6,6 +6,7 @@
     $config[ConfigConstants::PATH_MSG_MASTER] = 'message_master.json';
     $config[ConfigConstants::PATH_MSG_DESTINATION] = 'messages.json';
 
+    $config[ConfigConstants::DRY_RUN] = false;
     $config[ConfigConstants::VERBOSE_MODE] = true;
 
     $config[ConfigConstants::LOCALES_ACTIVE] = [

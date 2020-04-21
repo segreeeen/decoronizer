@@ -26,7 +26,7 @@ class LocalizationDataBuilderBusinessFactory
     protected $pageRenderer;
 
     /**
-     * @param PageRenderer $pageRenderer
+     * @param \LocalizationDataBuilder\Communication\PageRenderer $pageRenderer
      */
     public function providePageRenderer(PageRenderer $pageRenderer): void
     {

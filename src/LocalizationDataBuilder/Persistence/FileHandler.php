@@ -47,6 +47,10 @@ class FileHandler implements FileHandlerInterface
     public function writeOutFiles(
         array $replacementDataWithCorrelations
     ): void {
+        if (true === $this->config->isDryRun()) {
+            return;
+        }
+
         $this->createLocaleFolder();
 
         $msgMaster = file_get_contents($this->config->getMsgMasterPath());

@@ -91,4 +91,12 @@ class Config
     {
         return $this->config[ConfigConstants::VERBOSE_MODE];
     }
+
+    /**
+     * @return bool
+     */
+    public function isDryRun(): bool
+    {
+        return $this->config[ConfigConstants::DRY_RUN];
+    }
 }
