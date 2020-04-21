@@ -2,7 +2,7 @@
 
 namespace LocalizationDataBuilder\Config;
 
-class ConfigConstants
+interface ConfigConstants
 {
     public const PATH_OUTPUT = 'PATH_OUTPUT';
     public const PATH_SOURCE_CSV = 'PATH_SOURCE_CSV';

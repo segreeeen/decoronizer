@@ -4,7 +4,7 @@ namespace LocalizationDataBuilder\Business;
 
 use LocalizationDataBuilder\Config\Config;
 
-class MasterProcessor
+class MasterProcessor implements MasterProcessorInterface
 {
     /**
      * @param \LocalizationDataBuilder\Config\Config $config

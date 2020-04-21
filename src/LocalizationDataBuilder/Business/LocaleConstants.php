@@ -2,7 +2,7 @@
 
 namespace LocalizationDataBuilder\Business;
 
-class LocaleConstants
+interface LocaleConstants
 {
     public const ID_TEXT = 'id';
     public const CORRELATION = 'corr';

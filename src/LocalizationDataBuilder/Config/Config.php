@@ -18,6 +18,17 @@ class Config
     }
 
     /**
+     * @return \LocalizationDataBuilder\Config\Config
+     */
+    public static function buildConfig(): Config
+    {
+        include('config_default.php');
+
+        /** @var array $config */
+        return new Config($config);
+    }
+
+    /**
      * @return string
      */
     public function getOutputPath(): string
