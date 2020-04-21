@@ -1,0 +1,34 @@
+[
+    {
+        "f": "Corona",
+        "r": "Cica"
+    },
+    {
+        "f": "COVID-",
+        "r": "CICA-"
+    },
+    {
+        "f": "COVID ",
+        "r": "CICA "
+    },
+    {
+        "f": "COVID19",
+        "r": "CICA19"
+    },
+    {
+        "f": "SARS",
+        "r": "CICC"
+    },
+    {
+        "f": "CoV ",
+        "r": "MuRR "
+    },
+    {
+        "f": "CoV-",
+        "r": "MuRR-"
+    },
+    {
+        "f": "-CoV-",
+        "r": "-MuRR-"
+    }
+]

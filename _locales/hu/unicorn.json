@@ -1,0 +1,34 @@
+[
+    {
+        "f": "Corona",
+        "r": "Egyszarvú"
+    },
+    {
+        "f": "COVID-",
+        "r": "SZARV-"
+    },
+    {
+        "f": "COVID ",
+        "r": "SZARV "
+    },
+    {
+        "f": "COVID19",
+        "r": "SZARV19"
+    },
+    {
+        "f": "SARS",
+        "r": "CSILLÁM"
+    },
+    {
+        "f": "CoV ",
+        "r": "SzarV "
+    },
+    {
+        "f": "CoV-",
+        "r": "SzarV-"
+    },
+    {
+        "f": "-CoV-",
+        "r": "-SzarV-"
+    }
+]

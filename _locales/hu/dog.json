@@ -1,0 +1,34 @@
+[
+    {
+        "f": "Corona",
+        "r": "Kutyus"
+    },
+    {
+        "f": "COVID-",
+        "r": "KUTYUS-"
+    },
+    {
+        "f": "COVID ",
+        "r": "KUTYUS "
+    },
+    {
+        "f": "COVID19",
+        "r": "KUTYUS19"
+    },
+    {
+        "f": "SARS",
+        "r": "KUTYUS"
+    },
+    {
+        "f": "CoV ",
+        "r": "VaU "
+    },
+    {
+        "f": "CoV-",
+        "r": "VaU-"
+    },
+    {
+        "f": "-CoV-",
+        "r": "-VaU-"
+    }
+]
