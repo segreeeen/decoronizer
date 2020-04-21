@@ -8,28 +8,32 @@ use LocalizationDataBuilder\Config\Config;
 class ReplacementDataProcessor implements ReplacementDataProcessorInterface
 {
     /**
+     * @var \LocalizationDataBuilder\Config\Config
+     */
+    protected $config;
+
+    /**
      * @var \LocalizationDataBuilder\Communication\PageRenderer
      */
     protected $pageRenderer;
 
     /**
+     * @param \LocalizationDataBuilder\Config\Config $config
      * @param \LocalizationDataBuilder\Communication\PageRenderer $pageRenderer
      */
-    public function __construct(PageRenderer $pageRenderer)
+    public function __construct(Config $config, PageRenderer $pageRenderer)
     {
+        $this->config = $config;
         $this->pageRenderer = $pageRenderer;
     }
 
     /**
      * @param array $localeMaster
-     * @param \LocalizationDataBuilder\Config\Config $config
      *
      * @return array
      */
-    public function composeReplacementDataForLocales(
-        array $localeMaster,
-        Config $config
-    ): array {
+    public function composeReplacementDataForLocales(array $localeMaster): array
+    {
         $replacementDataForLocales = [];
         $lastTargetFile = '';
 
@@ -53,11 +57,11 @@ class ReplacementDataProcessor implements ReplacementDataProcessorInterface
             /**
              * @var array $activeLocaleCodes
              */
-            $activeLocaleCodes = $config->getActiveLocales();
+            $activeLocaleCodes = $this->config->getActiveLocales();
             foreach ($activeLocaleCodes as $activeLocaleCode) {
 
                 $correlation = $value[LocaleConstants::CORRELATION];
-                $derivativeTable = $config->getDerivativeTable();
+                $derivativeTable = $this->config->getDerivativeTable();
                 $derivationPatterns = $derivativeTable[$correlation];
 
                 $stringToFind = $localeMaster[$correlation][$activeLocaleCode];
@@ -82,7 +86,7 @@ class ReplacementDataProcessor implements ReplacementDataProcessorInterface
             }
         }
 
-        $replacementDataWithCorrelations = $this->addCorrelations($replacementDataForLocales, $config);
+        $replacementDataWithCorrelations = $this->addCorrelations($replacementDataForLocales);
 
         return $replacementDataWithCorrelations;
     }
@@ -124,13 +128,12 @@ class ReplacementDataProcessor implements ReplacementDataProcessorInterface
 
     /**
      * @param array $replacementDataForLocales
-     * @param Config $config
      *
      * @return array
      */
-    protected function addCorrelations(array $replacementDataForLocales, Config $config): array
+    protected function addCorrelations(array $replacementDataForLocales): array
     {
-        $localeCorrelations = $config->getLocaleCorrelations();
+        $localeCorrelations = $this->config->getLocaleCorrelations();
         $replacementDataWithCorrelations = [];
 
         foreach ($localeCorrelations as $localeCorrelation => $base) {

@@ -8,12 +8,8 @@ interface ReplacementDataProcessorInterface
 {
     /**
      * @param array $localeMaster
-     * @param \LocalizationDataBuilder\Config\Config $config
      *
      * @return array
      */
-    public function composeReplacementDataForLocales(
-        array $localeMaster,
-        Config $config
-    ): array;
+    public function composeReplacementDataForLocales(array $localeMaster): array;
 }

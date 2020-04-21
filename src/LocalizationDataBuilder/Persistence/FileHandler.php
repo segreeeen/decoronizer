@@ -3,68 +3,82 @@
 namespace LocalizationDataBuilder\Persistence;
 
 use InvalidArgumentException;
-use LocalizationDataBuilder\Business\JsonHelper;
+use LocalizationDataBuilder\Business\JsonHelperInterface;
 use LocalizationDataBuilder\Communication\PageRenderer;
 use LocalizationDataBuilder\Config\Config;
 
-class FileHandler
+class FileHandler implements FileHandlerInterface
 {
+    /**
+     * @var \LocalizationDataBuilder\Config\Config
+     */
+    protected $config;
+
     /**
      * @var \LocalizationDataBuilder\Business\JsonHelperInterface
      */
     protected $jsonHelper;
 
     /**
-     * @param \LocalizationDataBuilder\Business\JsonHelper $jsonHelper
+     * @var \LocalizationDataBuilder\Communication\PageRenderer
      */
-    public function __construct(JsonHelper $jsonHelper)
-    {
+    protected $pageRenderer;
+
+    /**
+     * @param \LocalizationDataBuilder\Config\Config $config
+     * @param \LocalizationDataBuilder\Business\JsonHelperInterface $jsonHelper
+     * @param \LocalizationDataBuilder\Communication\PageRenderer $pageRenderer
+     */
+    public function __construct(
+        Config $config,
+        JsonHelperInterface $jsonHelper,
+        PageRenderer $pageRenderer
+    ) {
+        $this->config = $config;
         $this->jsonHelper = $jsonHelper;
+        $this->pageRenderer = $pageRenderer;
     }
 
     /**
      * @param array $replacementDataWithCorrelations
-     * @param \LocalizationDataBuilder\Communication\PageRenderer $pageRenderer
-     * @param \LocalizationDataBuilder\Config\Config $config
      *
      * @return void
      */
-    public function writeOutFiles(array $replacementDataWithCorrelations, PageRenderer $pageRenderer, Config $config): void
-    {
-        $this->createLocaleFolder($config);
+    public function writeOutFiles(
+        array $replacementDataWithCorrelations
+    ): void {
+        $this->createLocaleFolder();
 
-        $msgMaster = file_get_contents($config->getMsgMasterPath());
-        $outputPath = $config->getOutputPath();
-        $destinationPath = $config->getMsgDestinationPath();
+        $msgMaster = file_get_contents($this->config->getMsgMasterPath());
+        $outputPath = $this->config->getOutputPath();
+        $destinationPath = $this->config->getMsgDestinationPath();
 
         foreach ($replacementDataWithCorrelations as $localeFolderName => $fileContents) {
             $folderPath = $outputPath . "/" . $localeFolderName;
-            $pageRenderer->renderWriteFolderInfo($folderPath);
+            $this->pageRenderer->renderWriteFolderInfo($folderPath);
             mkdir($folderPath,0777);
 
             $localeMessageContent = str_replace('{string}', $localeFolderName, $msgMaster);
             file_put_contents($folderPath . '/' . $destinationPath, $localeMessageContent);
-            $pageRenderer->renderWriteFileInfo($destinationPath);
+            $this->pageRenderer->renderWriteFileInfo($destinationPath);
 
             foreach ($fileContents as $fileBaseName => $content) {
                 $replacementsArray = $replacementDataWithCorrelations[$localeFolderName][$fileBaseName];
                 $json = $this->jsonHelper->build_json($replacementsArray);
 
                 $filename = $folderPath . '/' . $fileBaseName . '.json';
-                $pageRenderer->renderWriteFileInfo($filename);
+                $this->pageRenderer->renderWriteFileInfo($filename);
                 file_put_contents($filename, $json);
             }
         }
     }
 
     /**
-     * @param Config $config
-     *
      * @return void
      */
-    function createLocaleFolder(Config $config): void
+    protected function createLocaleFolder(): void
     {
-        $outputPath = $config->getOutputPath();
+        $outputPath = $this->config->getOutputPath();
 
         if (true === is_dir($outputPath)) {
             $this->deleteDir($outputPath);
@@ -78,7 +92,7 @@ class FileHandler
      *
      * @return void
      */
-    function deleteDir(string $dirPath): void
+    protected function deleteDir(string $dirPath): void
     {
         if (false === is_dir($dirPath)) {
             throw new InvalidArgumentException("$dirPath must be a directory.");
@@ -105,7 +119,7 @@ class FileHandler
      *
      * @return bool
      */
-    function hasTrailingSlash(string $path): bool
+    protected function hasTrailingSlash(string $path): bool
     {
         return substr($path, -1) === '/';
     }

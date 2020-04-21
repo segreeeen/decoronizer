@@ -2,39 +2,68 @@
 
 namespace LocalizationDataBuilder\Business;
 
-use LocalizationDataBuilder\Config\Config;
-use LocalizationDataBuilder\Communication\PageRenderer;
-use LocalizationDataBuilder\Persistence\FileHandler;
+use LocalizationDataBuilder\Communication\LocalizationDataBuilderCommunicationFactory;
 
 class Application
 {
+    /**
+     * @var \LocalizationDataBuilder\Communication\LocalizationDataBuilderCommunicationFactory
+     */
+    protected $localizationDataBuilderCommunicationFactory;
+
+    /**
+     * @var \LocalizationDataBuilder\Business\LocalizationDataBuilderBusinessFactory
+     */
+    protected $localizationDataBuilderBusinessFactory;
+
     /**
      * @return void
      */
     public function run(): void
     {
-        $config = Config::buildConfig();
+        $this->boot();
 
-        $masterProcessor = new MasterProcessor();
-
-        $pageRenderer = new PageRenderer($config);
-
-        $replacementDataProcessor = new ReplacementDataProcessor($pageRenderer);
-
-        $jsonHelper = new JsonHelper();
-
-        $fileHandler = new FileHandler($jsonHelper);
-
+        $pageRenderer = $this
+            ->localizationDataBuilderCommunicationFactory
+            ->createPageRenderer();
         $pageRenderer->renderHeader();
 
-        $localeMaster = $masterProcessor->processLocaleMaster($config);
+        $masterProcessor = $this
+            ->localizationDataBuilderBusinessFactory
+            ->createMasterProcessor();
+        $localeMaster = $masterProcessor
+            ->processLocaleMaster();
 
-        $replacementDataForLocales = $replacementDataProcessor->composeReplacementDataForLocales($localeMaster, $config);
+        $replacementDataProcessor = $this
+            ->localizationDataBuilderBusinessFactory
+            ->createReplacementDataProcessor();
+        $replacementDataForLocales = $replacementDataProcessor
+            ->composeReplacementDataForLocales($localeMaster);
 
         $pageRenderer->renderSeparatorLine();
 
-        $fileHandler->writeOutFiles($replacementDataForLocales, $pageRenderer, $config);
+        $fileHandler = $this
+            ->localizationDataBuilderBusinessFactory
+            ->createFileHandler();
+        $fileHandler->writeOutFiles($replacementDataForLocales);
 
         $pageRenderer->renderFoot();
+    }
+
+    /**
+     * @return void
+     */
+    protected function boot(): void
+    {
+        $this->localizationDataBuilderBusinessFactory = new LocalizationDataBuilderBusinessFactory();
+        $this->localizationDataBuilderCommunicationFactory = new LocalizationDataBuilderCommunicationFactory();
+
+        $pageRenderer = $this
+            ->localizationDataBuilderCommunicationFactory
+            ->createPageRenderer();
+
+        $this
+            ->localizationDataBuilderBusinessFactory
+            ->providePageRenderer($pageRenderer);
     }
 }
