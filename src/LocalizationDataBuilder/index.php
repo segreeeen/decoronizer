@@ -14,6 +14,8 @@ require_once('Business\LocalizationDataBuilderBusinessFactory.php');
 require_once('Business\LocaleConstants.php');
 require_once('Business\LocaleMasterProcessorInterface.php');
 require_once('Business\LocaleMasterProcessor.php');
+require_once('Business\MessageMasterProcessorInterface.php');
+require_once('Business\MessageMasterProcessor.php');
 require_once('Business\ReplacementDataProcessorInterface.php');
 require_once('Business\ReplacementDataProcessor.php');
 

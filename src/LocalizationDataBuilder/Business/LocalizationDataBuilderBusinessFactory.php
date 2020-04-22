@@ -87,4 +87,15 @@ class LocalizationDataBuilderBusinessFactory
             $this->pageRenderer
         );
     }
+
+    /**
+     * @return \LocalizationDataBuilder\Business\MessageMasterProcessorInterface
+     */
+    public function createMessageMasterProcessor(): MessageMasterProcessorInterface
+    {
+        return new MessageMasterProcessor(
+            $this->getConfig(),
+            $this->createFileHandler()
+        );
+    }
 }

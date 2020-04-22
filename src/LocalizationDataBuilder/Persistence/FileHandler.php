@@ -63,11 +63,14 @@ class FileHandler implements FileHandlerInterface
 
     /**
      * @param \LocalizationDataBuilder\Shared\ReplacementDataTransfer $replacementDataTransfer
+     * @param array $messageMaster
      *
      * @return void
      */
-    public function writeOutFiles(ReplacementDataTransfer $replacementDataTransfer): void
-    {
+    public function writeOutFiles(
+        ReplacementDataTransfer $replacementDataTransfer,
+        array $messageMaster
+    ): void {
         if (true === $this->config->isDryRun()) {
             return;
         }
@@ -75,7 +78,6 @@ class FileHandler implements FileHandlerInterface
         $outputPath = $this->config->getOutputPath();
         $this->createFolder($outputPath);
 
-        $msgMaster = $this->readFromFileAsString($this->config->getFilenameMsgMaster());
         $msgDestinationFilename = $this->config->getFilenameMsgDestination();
 
         $replacementData = $replacementDataTransfer->getReplacementData();
@@ -83,13 +85,18 @@ class FileHandler implements FileHandlerInterface
         foreach ($replacementData as $localeFolderName => $fileContents) {
             $localeFolderPath = $this->buildPath($outputPath, $localeFolderName);
             $this->createFolder($localeFolderPath);
+
             $this->pageRenderer->renderWriteFolderInfo($localeFolderPath);
 
-            $localeMessageContent = str_replace(LocaleConstants::PLACEHOLDER, $localeFolderName, $msgMaster);
-
-            $localeMessageFilePath = $this->buildPath($localeFolderPath, $msgDestinationFilename);
-            $this->writeOutToFile($localeMessageFilePath, $localeMessageContent);
-            $this->pageRenderer->renderInfoWrittenFile($msgDestinationFilename);
+            $localeMessageFilePath = $this->buildPath(
+                $localeFolderPath,
+                $msgDestinationFilename
+            );
+            $this->writeOutMessageMaster(
+                $localeMessageFilePath,
+                $msgDestinationFilename,
+                $messageMaster[$localeFolderName]
+            );
 
             foreach ($fileContents as $fileNameWithoutExtension => $content) {
                 $replacementsArray = $replacementDataTransfer
@@ -97,6 +104,8 @@ class FileHandler implements FileHandlerInterface
                         $localeFolderName,
                         $fileNameWithoutExtension
                     );
+
+                // TODO: Actually, that's not your job, either...
                 $json = $this->jsonHelper->build_json($replacementsArray);
 
                 $localeFilePath = $this->buildPath($localeFolderPath, $fileNameWithoutExtension, '.json');
@@ -104,6 +113,28 @@ class FileHandler implements FileHandlerInterface
                 $this->pageRenderer->renderInfoWrittenFile($localeFilePath);
             }
         }
+    }
+
+    protected function writeOutReplacementData(): void
+    {
+
+    }
+
+    /**
+     * @param string $localeMessageFilePath
+     * @param string $msgDestinationFilename
+     * @param string $localeMessageContent
+     *
+     * @return void
+     */
+    protected function writeOutMessageMaster(
+        string $localeMessageFilePath,
+        string $msgDestinationFilename,
+        string $localeMessageContent
+    ): void {
+        $this->writeOutToFile($localeMessageFilePath, $localeMessageContent);
+
+        $this->pageRenderer->renderInfoWrittenFile($msgDestinationFilename);
     }
 
     /**

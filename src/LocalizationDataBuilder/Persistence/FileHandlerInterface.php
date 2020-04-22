@@ -22,10 +22,12 @@ interface FileHandlerInterface
 
     /**
      * @param \LocalizationDataBuilder\Shared\ReplacementDataTransfer $replacementDataTransfer
+     * @param array $messageMaster
      *
      * @return void
      */
     public function writeOutFiles(
-        ReplacementDataTransfer $replacementDataTransfer
+        ReplacementDataTransfer $replacementDataTransfer,
+        array $messageMaster
     ): void;
 }
