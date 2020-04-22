@@ -2,14 +2,14 @@
 
 namespace LocalizationDataBuilder\Business;
 
-use LocalizationDataBuilder\Config\Config;
+use LocalizationDataBuilder\Shared\ReplacementDataTransfer;
 
 interface ReplacementDataProcessorInterface
 {
     /**
      * @param array $localeMaster
      *
-     * @return array
+     * @return \LocalizationDataBuilder\Shared\ReplacementDataTransfer
      */
-    public function composeReplacementDataForLocales(array $localeMaster): array;
+    public function composeReplacementDataForLocales(array $localeMaster): ReplacementDataTransfer;
 }

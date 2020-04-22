@@ -4,6 +4,7 @@ namespace LocalizationDataBuilder\Business;
 
 use LocalizationDataBuilder\Communication\PageRenderer;
 use LocalizationDataBuilder\Config\Config;
+use LocalizationDataBuilder\Shared\ReplacementDataTransfer;
 
 class ReplacementDataProcessor implements ReplacementDataProcessorInterface
 {
@@ -30,11 +31,11 @@ class ReplacementDataProcessor implements ReplacementDataProcessorInterface
     /**
      * @param array $localeMaster
      *
-     * @return array
+     * @return ReplacementDataTransfer
      */
-    public function composeReplacementDataForLocales(array $localeMaster): array
+    public function composeReplacementDataForLocales(array $localeMaster): ReplacementDataTransfer
     {
-        $replacementDataForLocales = [];
+        $replacementDataTransfer = new ReplacementDataTransfer();
         $lastTargetFile = '';
 
         foreach ($localeMaster as $key => $value) {
@@ -67,28 +68,39 @@ class ReplacementDataProcessor implements ReplacementDataProcessorInterface
                 $stringToFind = $localeMaster[$correlation][$activeLocaleCode];
                 $replacement = $value[$activeLocaleCode];
 
-                $findAndReplaceData = $this->composeReplacementData($derivationPatterns, $stringToFind, $replacement);
+                $replacementData = $this->composeReplacementData($derivationPatterns, $stringToFind, $replacement);
 
-                if (isset($replacementDataForLocales[$activeLocaleCode][$currentTargetFile])) {
-                    $replacementDataForLocales[$activeLocaleCode][$currentTargetFile] = array_merge(
-                        $replacementDataForLocales[$activeLocaleCode][$currentTargetFile],
-                        $findAndReplaceData
+                if (true === $replacementDataTransfer->hasDataForFileInLocale($activeLocaleCode, $currentTargetFile)) {
+                    $currentData = $replacementDataTransfer
+                        ->getDataForFileInLocale(
+                            $activeLocaleCode,
+                            $currentTargetFile
+                        );
+                    $extendedData = array_merge($currentData, $replacementData);
+                    $replacementDataTransfer->setDataForFileInLocale(
+                        $activeLocaleCode,
+                        $currentTargetFile,
+                        $extendedData
                     );
                 } else {
-                    $replacementDataForLocales[$activeLocaleCode][$currentTargetFile] = $findAndReplaceData;
+                    $replacementDataTransfer->setDataForFileInLocale(
+                        $activeLocaleCode,
+                        $currentTargetFile,
+                        $replacementData
+                    );
                 }
 
                 $this->pageRenderer->renderReplaceInfo(
                     $localeMaster[$correlation][$activeLocaleCode],
                     $activeLocaleCode,
-                    count($findAndReplaceData)
+                    count($replacementData)
                 );
             }
         }
 
-        $replacementDataWithCorrelations = $this->addCorrelations($replacementDataForLocales);
+        $this->addCorrelations($replacementDataTransfer);
 
-        return $replacementDataWithCorrelations;
+        return $replacementDataTransfer;
     }
 
     /**
@@ -127,20 +139,28 @@ class ReplacementDataProcessor implements ReplacementDataProcessorInterface
     }
 
     /**
-     * @param array $replacementDataForLocales
+     * @param \LocalizationDataBuilder\Shared\ReplacementDataTransfer $replacementDataTransfer
      *
-     * @return array
+     * @return \LocalizationDataBuilder\Shared\ReplacementDataTransfer
      */
-    protected function addCorrelations(array $replacementDataForLocales): array
+    protected function addCorrelations(ReplacementDataTransfer $replacementDataTransfer): ReplacementDataTransfer
     {
         $localeCorrelations = $this->config->getLocaleCorrelations();
-        $replacementDataWithCorrelations = [];
 
         foreach ($localeCorrelations as $localeCorrelation => $base) {
-            $replacementDataWithCorrelations[$localeCorrelation] = $replacementDataForLocales[$base];
+            if ($replacementDataTransfer->hasDataForLocale($localeCorrelation)) {
+                continue;
+            }
+
+            $localeDataToCopy = $replacementDataTransfer->getDataForLocale($base);
+
+            $replacementDataTransfer->setDataForLocale(
+                $localeCorrelation,
+                $localeDataToCopy
+            );
         }
 
-        return $replacementDataWithCorrelations;
+        return $replacementDataTransfer;
     }
 
     /**

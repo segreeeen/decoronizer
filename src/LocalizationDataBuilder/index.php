@@ -5,6 +5,8 @@
 require_once('Config\ConfigConstants.php');
 require_once('Config\Config.php');
 
+require_once('Shared\ReplacementDataTransfer.php');
+
 require_once('Business\Application.php');
 require_once('Business\JsonHelperInterface.php');
 require_once('Business\JsonHelper.php');

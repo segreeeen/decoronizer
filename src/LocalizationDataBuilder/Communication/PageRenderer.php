@@ -85,7 +85,7 @@ class PageRenderer
      *
      * @return void
      */
-    public function renderWriteFileInfo(string $destinationFile): void
+    public function renderInfoWrittenFile(string $destinationFile): void
     {
         $this->renderText('File "' . $destinationFile . '" written.<br>');
     }

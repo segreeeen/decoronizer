@@ -7,6 +7,7 @@ use LocalizationDataBuilder\Business\JsonHelperInterface;
 use LocalizationDataBuilder\Business\LocaleConstants;
 use LocalizationDataBuilder\Communication\PageRenderer;
 use LocalizationDataBuilder\Config\Config;
+use LocalizationDataBuilder\Shared\ReplacementDataTransfer;
 
 class FileHandler implements FileHandlerInterface
 {
@@ -41,13 +42,12 @@ class FileHandler implements FileHandlerInterface
     }
 
     /**
-     * @param array $replacementDataWithCorrelations
+     * @param \LocalizationDataBuilder\Shared\ReplacementDataTransfer $replacementDataTransfer
      *
      * @return void
      */
-    public function writeOutFiles(
-        array $replacementDataWithCorrelations
-    ): void {
+    public function writeOutFiles(ReplacementDataTransfer $replacementDataTransfer): void
+    {
         if (true === $this->config->isDryRun()) {
             return;
         }
@@ -55,10 +55,12 @@ class FileHandler implements FileHandlerInterface
         $outputPath = $this->config->getOutputPath();
         $this->createFolder($outputPath);
 
-        $msgMaster = file_get_contents($this->config->getFilenameMsgMaster());
+        $msgMaster = $this->readFromFile($this->config->getFilenameMsgMaster());
         $msgDestinationFilename = $this->config->getFilenameMsgDestination();
 
-        foreach ($replacementDataWithCorrelations as $localeFolderName => $fileContents) {
+        $replacementData = $replacementDataTransfer->getReplacementData();
+
+        foreach ($replacementData as $localeFolderName => $fileContents) {
             $localeFolderPath = $this->buildPath($outputPath, $localeFolderName);
             $this->createFolder($localeFolderPath);
             $this->pageRenderer->renderWriteFolderInfo($localeFolderPath);
@@ -66,16 +68,20 @@ class FileHandler implements FileHandlerInterface
             $localeMessageContent = str_replace(LocaleConstants::PLACEHOLDER, $localeFolderName, $msgMaster);
 
             $localeMessageFilePath = $this->buildPath($localeFolderPath, $msgDestinationFilename);
-            file_put_contents($localeMessageFilePath, $localeMessageContent);
-            $this->pageRenderer->renderWriteFileInfo($msgDestinationFilename);
+            $this->writeOutToFile($localeMessageFilePath, $localeMessageContent);
+            $this->pageRenderer->renderInfoWrittenFile($msgDestinationFilename);
 
             foreach ($fileContents as $fileNameWithoutExtension => $content) {
-                $replacementsArray = $replacementDataWithCorrelations[$localeFolderName][$fileNameWithoutExtension];
+                $replacementsArray = $replacementDataTransfer
+                    ->getDataForFileInLocale(
+                        $localeFolderName,
+                        $fileNameWithoutExtension
+                    );
                 $json = $this->jsonHelper->build_json($replacementsArray);
 
                 $localeFilePath = $this->buildPath($localeFolderPath, $fileNameWithoutExtension, '.json');
-                file_put_contents($localeFilePath, $json);
-                $this->pageRenderer->renderWriteFileInfo($localeFilePath);
+                $this->writeOutToFile($localeFilePath, $json);
+                $this->pageRenderer->renderInfoWrittenFile($localeFilePath);
             }
         }
     }
@@ -92,6 +98,27 @@ class FileHandler implements FileHandlerInterface
         }
 
         mkdir($folderPath,0777);
+    }
+
+    /**
+     * @param string $pathToFile
+     *
+     * @return string
+     */
+    protected function readFromFile(string $pathToFile): string
+    {
+        return file_get_contents($pathToFile);
+    }
+
+    /**
+     * @param string $pathToFile
+     * @param string $data
+     *
+     * @return void
+     */
+    protected function writeOutToFile(string $pathToFile, string $data): void
+    {
+        file_put_contents($pathToFile, $data);
     }
 
     /**

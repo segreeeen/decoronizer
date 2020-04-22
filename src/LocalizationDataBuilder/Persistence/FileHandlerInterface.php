@@ -2,14 +2,16 @@
 
 namespace LocalizationDataBuilder\Persistence;
 
+use LocalizationDataBuilder\Shared\ReplacementDataTransfer;
+
 interface FileHandlerInterface
 {
     /**
-     * @param array $replacementDataWithCorrelations
+     * @param \LocalizationDataBuilder\Shared\ReplacementDataTransfer $replacementDataTransfer
      *
      * @return void
      */
     public function writeOutFiles(
-        array $replacementDataWithCorrelations
+        ReplacementDataTransfer $replacementDataTransfer
     ): void;
 }
