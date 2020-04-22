@@ -4,7 +4,6 @@ namespace LocalizationDataBuilder\Persistence;
 
 use InvalidArgumentException;
 use LocalizationDataBuilder\Business\JsonHelperInterface;
-use LocalizationDataBuilder\Business\LocaleConstants;
 use LocalizationDataBuilder\Communication\PageRenderer;
 use LocalizationDataBuilder\Config\Config;
 use LocalizationDataBuilder\Shared\ReplacementDataTransfer;
@@ -79,7 +78,6 @@ class FileHandler implements FileHandlerInterface
         $this->createFolder($outputPath);
 
         $msgDestinationFilename = $this->config->getFilenameMsgDestination();
-
         $replacementData = $replacementDataTransfer->getReplacementData();
 
         foreach ($replacementData as $localeFolderName => $fileContents) {
@@ -92,32 +90,50 @@ class FileHandler implements FileHandlerInterface
                 $localeFolderPath,
                 $msgDestinationFilename
             );
+
             $this->writeOutMessageMaster(
                 $localeMessageFilePath,
                 $msgDestinationFilename,
                 $messageMaster[$localeFolderName]
             );
 
-            foreach ($fileContents as $fileNameWithoutExtension => $content) {
-                $replacementsArray = $replacementDataTransfer
-                    ->getDataForFileInLocale(
-                        $localeFolderName,
-                        $fileNameWithoutExtension
-                    );
-
-                // TODO: Actually, that's not your job, either...
-                $json = $this->jsonHelper->build_json($replacementsArray);
-
-                $localeFilePath = $this->buildPath($localeFolderPath, $fileNameWithoutExtension, '.json');
-                $this->writeOutToFile($localeFilePath, $json);
-                $this->pageRenderer->renderInfoWrittenFile($localeFilePath);
-            }
+            $this->writeOutReplacementData(
+                $localeFolderPath,
+                $localeFolderName,
+                $fileContents,
+                $replacementDataTransfer
+            );
         }
     }
 
-    protected function writeOutReplacementData(): void
-    {
+    /**
+     * @param string $localeFolderPath
+     * @param string $localeFolderName
+     * @param array $fileContents
+     * @param ReplacementDataTransfer $replacementDataTransfer
+     *
+     * @return void
+     */
+    protected function writeOutReplacementData(
+        string $localeFolderPath,
+        string $localeFolderName,
+        array $fileContents,
+        ReplacementDataTransfer $replacementDataTransfer
+    ): void {
+        foreach ($fileContents as $fileNameWithoutExtension => $content) {
+            $replacementsArray = $replacementDataTransfer
+                ->getDataForFileInLocale(
+                    $localeFolderName,
+                    $fileNameWithoutExtension
+                );
 
+            // TODO: Actually, that's not your job, either...
+            $json = $this->jsonHelper->build_json($replacementsArray);
+
+            $localeFilePath = $this->buildPath($localeFolderPath, $fileNameWithoutExtension, '.json');
+            $this->writeOutToFile($localeFilePath, $json);
+            $this->pageRenderer->renderInfoWrittenFile($localeFilePath);
+        }
     }
 
     /**

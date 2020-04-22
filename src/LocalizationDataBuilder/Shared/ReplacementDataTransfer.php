@@ -10,6 +10,11 @@ class ReplacementDataTransfer
     protected $replacementData;
 
     /**
+     * @var string
+     */
+    protected $replacementDataAsJsonString;
+
+    /**
      * @param string $localeCode
      *
      * @return bool
@@ -60,6 +65,14 @@ class ReplacementDataTransfer
     }
 
     /**
+     * @return string
+     */
+    public function getReplacementDataAsJsonString(): string
+    {
+        return $this->replacementDataAsJsonString;
+    }
+
+    /**
      * @param string $localeCode
      * @param array $data
      *
@@ -80,5 +93,15 @@ class ReplacementDataTransfer
     public function setDataForFileInLocale(string $localeCode, string $filename, array $data): void
     {
         $this->replacementData[$localeCode][$filename] = $data;
+    }
+
+    /**
+     * @param string $replacementDataAsJsonString
+     *
+     * @return void
+     */
+    public function setReplacementDataAsJsonString(string $replacementDataAsJsonString): void
+    {
+        $this->replacementDataAsJsonString = $replacementDataAsJsonString;
     }
 }
