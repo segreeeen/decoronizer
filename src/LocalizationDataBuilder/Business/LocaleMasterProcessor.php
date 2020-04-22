@@ -3,8 +3,9 @@
 namespace LocalizationDataBuilder\Business;
 
 use LocalizationDataBuilder\Config\Config;
+use LocalizationDataBuilder\Persistence\FileHandlerInterface;
 
-class MasterProcessor implements MasterProcessorInterface
+class LocaleMasterProcessor implements LocaleMasterProcessorInterface
 {
     /**
      * @var \LocalizationDataBuilder\Config\Config
@@ -12,11 +13,20 @@ class MasterProcessor implements MasterProcessorInterface
     protected $config;
 
     /**
-     * @param \LocalizationDataBuilder\Config\Config $config
+     * @var \LocalizationDataBuilder\Persistence\FileHandler
      */
-    public function __construct(Config $config)
-    {
+    protected $fileHandler;
+
+    /**
+     * @param \LocalizationDataBuilder\Config\Config $config
+     * @param \LocalizationDataBuilder\Persistence\FileHandlerInterface $fileHandler
+     */
+    public function __construct(
+        Config $config,
+        FileHandlerInterface $fileHandler
+    ) {
         $this->config = $config;
+        $this->fileHandler = $fileHandler;
     }
 
     /**
@@ -25,6 +35,7 @@ class MasterProcessor implements MasterProcessorInterface
     public function processLocaleMaster(): array
     {
         $localeMaster = $this->loadLocaleMasterData();
+        $localeMaster = $this->mapLocaleMasterData($localeMaster);
         $localeMaster = $this->processLocaleMasterData($localeMaster);
         $localeMaster = $this->rebuildWithIdKeys($localeMaster);
 
@@ -36,12 +47,24 @@ class MasterProcessor implements MasterProcessorInterface
      */
     protected function loadLocaleMasterData(): array
     {
-        $localeMaster = array_map(
-            'str_getcsv',
-            file($this->config->getFilenameSourceCsv())
-        );
+        return $rawDataFromCsv = $this
+            ->fileHandler
+            ->readFromFileAsArray(
+                $this->config->getFilenameSourceCsv()
+            );
+    }
 
-        return $localeMaster;
+    /**
+     * @param array $rawDataFromCsv
+     *
+     * @return array
+     */
+    protected function mapLocaleMasterData(array $rawDataFromCsv): array
+    {
+        return $mappedData = array_map(
+            'str_getcsv',
+            $rawDataFromCsv
+        );
     }
 
     /**
@@ -66,13 +89,13 @@ class MasterProcessor implements MasterProcessorInterface
      */
     protected function rebuildWithIdKeys(array $localeMaster): array
     {
-        $localeMasterIdKeys = [];
+        $localeMasterWithIdKeys = [];
 
         foreach ($localeMaster as $item) {
             $id = $item[LocaleConstants::ID_TEXT];
-            $localeMasterIdKeys[$id] = $item;
+            $localeMasterWithIdKeys[$id] = $item;
         }
 
-        return $localeMasterIdKeys;
+        return $localeMasterWithIdKeys;
     }
 }

@@ -66,12 +66,13 @@ class LocalizationDataBuilderBusinessFactory
     }
 
     /**
-     * @return \LocalizationDataBuilder\Business\MasterProcessorInterface
+     * @return \LocalizationDataBuilder\Business\LocaleMasterProcessorInterface
      */
-    public function createMasterProcessor(): MasterProcessorInterface
+    public function createMasterProcessor(): LocaleMasterProcessorInterface
     {
-        return new MasterProcessor(
-            $this->getConfig()
+        return new LocaleMasterProcessor(
+            $this->getConfig(),
+            $this->createFileHandler()
         );
     }
 
@@ -82,6 +83,7 @@ class LocalizationDataBuilderBusinessFactory
     {
         return new ReplacementDataProcessor(
             $this->getConfig(),
+            $this->createFileHandler(),
             $this->pageRenderer
         );
     }

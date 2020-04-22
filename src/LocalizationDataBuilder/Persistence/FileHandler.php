@@ -42,6 +42,26 @@ class FileHandler implements FileHandlerInterface
     }
 
     /**
+     * @param string $pathToFile
+     *
+     * @return string
+     */
+    public function readFromFileAsString(string $pathToFile): string
+    {
+        return file_get_contents($pathToFile);
+    }
+
+    /**
+     * @param string $pathToFile
+     *
+     * @return array
+     */
+    public function readFromFileAsArray(string $pathToFile): array
+    {
+        return file($pathToFile);
+    }
+
+    /**
      * @param \LocalizationDataBuilder\Shared\ReplacementDataTransfer $replacementDataTransfer
      *
      * @return void
@@ -55,7 +75,7 @@ class FileHandler implements FileHandlerInterface
         $outputPath = $this->config->getOutputPath();
         $this->createFolder($outputPath);
 
-        $msgMaster = $this->readFromFile($this->config->getFilenameMsgMaster());
+        $msgMaster = $this->readFromFileAsString($this->config->getFilenameMsgMaster());
         $msgDestinationFilename = $this->config->getFilenameMsgDestination();
 
         $replacementData = $replacementDataTransfer->getReplacementData();
@@ -98,16 +118,6 @@ class FileHandler implements FileHandlerInterface
         }
 
         mkdir($folderPath,0777);
-    }
-
-    /**
-     * @param string $pathToFile
-     *
-     * @return string
-     */
-    protected function readFromFile(string $pathToFile): string
-    {
-        return file_get_contents($pathToFile);
     }
 
     /**

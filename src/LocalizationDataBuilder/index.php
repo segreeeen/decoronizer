@@ -12,8 +12,8 @@ require_once('Business\JsonHelperInterface.php');
 require_once('Business\JsonHelper.php');
 require_once('Business\LocalizationDataBuilderBusinessFactory.php');
 require_once('Business\LocaleConstants.php');
-require_once('Business\MasterProcessorInterface.php');
-require_once('Business\MasterProcessor.php');
+require_once('Business\LocaleMasterProcessorInterface.php');
+require_once('Business\LocaleMasterProcessor.php');
 require_once('Business\ReplacementDataProcessorInterface.php');
 require_once('Business\ReplacementDataProcessor.php');
 
