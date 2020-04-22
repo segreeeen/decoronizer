@@ -4,16 +4,27 @@ namespace LocalizationDataBuilder\Business;
 
 use LocalizationDataBuilder\Config\Config;
 
-class MasterProcessor
+class MasterProcessor implements MasterProcessorInterface
 {
     /**
+     * @var \LocalizationDataBuilder\Config\Config
+     */
+    protected $config;
+
+    /**
      * @param \LocalizationDataBuilder\Config\Config $config
-     *
+     */
+    public function __construct(Config $config)
+    {
+        $this->config = $config;
+    }
+
+    /**
      * @return array
      */
-    public function processLocaleMaster(Config $config): array
+    public function processLocaleMaster(): array
     {
-        $localeMaster = $this->loadLocaleMasterData($config);
+        $localeMaster = $this->loadLocaleMasterData();
         $localeMaster = $this->processLocaleMasterData($localeMaster);
         $localeMaster = $this->rebuildWithIdKeys($localeMaster);
 
@@ -21,15 +32,13 @@ class MasterProcessor
     }
 
     /**
-     * @param \LocalizationDataBuilder\Config\Config $config
-     *
      * @return array
      */
-    protected function loadLocaleMasterData(Config $config): array
+    protected function loadLocaleMasterData(): array
     {
         $localeMaster = array_map(
             'str_getcsv',
-            file($config->getSourceCsvPath())
+            file($this->config->getSourceCsvPath())
         );
 
         return $localeMaster;
