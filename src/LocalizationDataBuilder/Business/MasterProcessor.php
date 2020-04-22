@@ -38,7 +38,7 @@ class MasterProcessor implements MasterProcessorInterface
     {
         $localeMaster = array_map(
             'str_getcsv',
-            file($this->config->getSourceCsvPath())
+            file($this->config->getFilenameSourceCsv())
         );
 
         return $localeMaster;

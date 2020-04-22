@@ -2,9 +2,10 @@
     use LocalizationDataBuilder\Config\ConfigConstants;
 
     $config[ConfigConstants::PATH_OUTPUT] = '_locales';
-    $config[ConfigConstants::PATH_SOURCE_CSV] = 'locale_master.csv';
-    $config[ConfigConstants::PATH_MSG_MASTER] = 'message_master.json';
-    $config[ConfigConstants::PATH_MSG_DESTINATION] = 'messages.json';
+
+    $config[ConfigConstants::FILENAME_SOURCE_CSV] = 'locale_master.csv';
+    $config[ConfigConstants::FILENAME_MSG_MASTER] = 'message_master.json';
+    $config[ConfigConstants::FILENAME_MSG_DESTINATION] = 'messages.json';
 
     $config[ConfigConstants::DRY_RUN] = false;
     $config[ConfigConstants::VERBOSE_MODE] = true;
