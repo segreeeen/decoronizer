@@ -8,6 +8,8 @@ require_once('Config\Config.php');
 require_once('Shared\ReplacementDataTransfer.php');
 
 require_once('Business\Application.php');
+require_once('Business\DataWriterInterface.php');
+require_once('Business\DataWriter.php');
 require_once('Business\JsonHelperInterface.php');
 require_once('Business\JsonHelper.php');
 require_once('Business\LocalizationDataBuilderBusinessFactory.php');

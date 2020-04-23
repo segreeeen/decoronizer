@@ -7,6 +7,36 @@ use LocalizationDataBuilder\Shared\ReplacementDataTransfer;
 interface FileHandlerInterface
 {
     /**
+     * @param string $path
+     * @param string $fileOrFolderName
+     * @param string $extension
+     *
+     * @return string
+     */
+    public function buildPath(string $path, string $fileOrFolderName, string $extension = ''): string;
+
+    /**
+     * @param string $folderPath
+     *
+     * @return void
+     */
+    public function createFolder(string $folderPath): void;
+
+    /**
+     * @param string $folderPath
+     *
+     * @return void
+     */
+    public function deleteDir(string $folderPath): void;
+
+    /**
+     * @param string $path
+     *
+     * @return bool
+     */
+    public function hasTrailingSlash(string $path): bool;
+
+    /**
      * @param string $pathToFile
      *
      * @return string
@@ -21,13 +51,10 @@ interface FileHandlerInterface
     public function readFromFileAsArray(string $pathToFile): array;
 
     /**
-     * @param \LocalizationDataBuilder\Shared\ReplacementDataTransfer $replacementDataTransfer
-     * @param array $messageMaster
+     * @param string $pathToFile
+     * @param string $data
      *
      * @return void
      */
-    public function writeOutFiles(
-        ReplacementDataTransfer $replacementDataTransfer,
-        array $messageMaster
-    ): void;
+    public function writeOutToFile(string $pathToFile, string $data): void;
 }

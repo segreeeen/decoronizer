@@ -50,10 +50,10 @@ class Application
                 $replacementDataTransfer
             );
 
-        $fileHandler = $this
+        $dataWriter = $this
             ->localizationDataBuilderBusinessFactory
-            ->createFileHandler();
-        $fileHandler->writeOutFiles(
+            ->createDataWriter();
+        $dataWriter->writeOutData(
             $replacementDataTransfer,
             $messageMaster
         );

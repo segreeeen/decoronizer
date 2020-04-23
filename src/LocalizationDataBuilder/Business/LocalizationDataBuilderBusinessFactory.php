@@ -50,11 +50,7 @@ class LocalizationDataBuilderBusinessFactory
      */
     public function createFileHandler(): FileHandlerInterface
     {
-        return new FileHandler(
-            $this->getConfig(),
-            $this->createJsonHelper(),
-            $this->pageRenderer
-        );
+        return new FileHandler();
     }
 
     /**
@@ -96,6 +92,19 @@ class LocalizationDataBuilderBusinessFactory
         return new MessageMasterProcessor(
             $this->getConfig(),
             $this->createFileHandler()
+        );
+    }
+
+    /**
+     * @return \LocalizationDataBuilder\Business\DataWriterInterface
+     */
+    public function createDataWriter(): DataWriterInterface
+    {
+        return new DataWriter(
+            $this->getConfig(),
+            $this->createFileHandler(),
+            $this->createJsonHelper(),
+            $this->pageRenderer
         );
     }
 }
