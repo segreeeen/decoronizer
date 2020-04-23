@@ -77,7 +77,7 @@ class PageRenderer
     public function renderWriteFolderInfo(string $destinationFolder): void
     {
         $this->renderText('<hr>');
-        $this->renderText('Write Folder '. $destinationFolder . '<br>');
+        $this->renderText('Folder "'. $destinationFolder . '" created.<br>');
     }
 
     /**
@@ -85,9 +85,9 @@ class PageRenderer
      *
      * @return void
      */
-    public function renderWriteFileInfo(string $destinationFile): void
+    public function renderInfoWrittenFile(string $destinationFile): void
     {
-        $this->renderText('Write file ' . $destinationFile . '<br>');
+        $this->renderText('File "' . $destinationFile . '" written.<br>');
     }
 
     /**

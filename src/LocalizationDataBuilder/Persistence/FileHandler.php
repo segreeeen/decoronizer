@@ -3,106 +3,55 @@
 namespace LocalizationDataBuilder\Persistence;
 
 use InvalidArgumentException;
-use LocalizationDataBuilder\Business\JsonHelperInterface;
-use LocalizationDataBuilder\Communication\PageRenderer;
-use LocalizationDataBuilder\Config\Config;
 
 class FileHandler implements FileHandlerInterface
 {
     /**
-     * @var \LocalizationDataBuilder\Config\Config
+     * @param string $path
+     * @param string $fileOrFolderName
+     * @param string $extension
+     *
+     * @return string
      */
-    protected $config;
+    public function buildPath(string $path, string $fileOrFolderName, string $extension = ''): string
+    {
+        if ('' === $extension) {
+            return sprintf("%s/%s", $path, $fileOrFolderName);
+        }
 
-    /**
-     * @var \LocalizationDataBuilder\Business\JsonHelperInterface
-     */
-    protected $jsonHelper;
-
-    /**
-     * @var \LocalizationDataBuilder\Communication\PageRenderer
-     */
-    protected $pageRenderer;
-
-    /**
-     * @param \LocalizationDataBuilder\Config\Config $config
-     * @param \LocalizationDataBuilder\Business\JsonHelperInterface $jsonHelper
-     * @param \LocalizationDataBuilder\Communication\PageRenderer $pageRenderer
-     */
-    public function __construct(
-        Config $config,
-        JsonHelperInterface $jsonHelper,
-        PageRenderer $pageRenderer
-    ) {
-        $this->config = $config;
-        $this->jsonHelper = $jsonHelper;
-        $this->pageRenderer = $pageRenderer;
+        return sprintf("%s/%s.%s", $path, $fileOrFolderName, $extension);
     }
 
     /**
-     * @param array $replacementDataWithCorrelations
+     * @param string $folderPath
      *
      * @return void
      */
-    public function writeOutFiles(
-        array $replacementDataWithCorrelations
-    ): void {
-        $this->createLocaleFolder();
-
-        $msgMaster = file_get_contents($this->config->getMsgMasterPath());
-        $outputPath = $this->config->getOutputPath();
-        $destinationPath = $this->config->getMsgDestinationPath();
-
-        foreach ($replacementDataWithCorrelations as $localeFolderName => $fileContents) {
-            $folderPath = $outputPath . "/" . $localeFolderName;
-            $this->pageRenderer->renderWriteFolderInfo($folderPath);
-            mkdir($folderPath,0777);
-
-            $localeMessageContent = str_replace('{string}', $localeFolderName, $msgMaster);
-            file_put_contents($folderPath . '/' . $destinationPath, $localeMessageContent);
-            $this->pageRenderer->renderWriteFileInfo($destinationPath);
-
-            foreach ($fileContents as $fileBaseName => $content) {
-                $replacementsArray = $replacementDataWithCorrelations[$localeFolderName][$fileBaseName];
-                $json = $this->jsonHelper->build_json($replacementsArray);
-
-                $filename = $folderPath . '/' . $fileBaseName . '.json';
-                $this->pageRenderer->renderWriteFileInfo($filename);
-                file_put_contents($filename, $json);
-            }
-        }
-    }
-
-    /**
-     * @return void
-     */
-    protected function createLocaleFolder(): void
+    public function createFolder(string $folderPath): void
     {
-        $outputPath = $this->config->getOutputPath();
-
-        if (true === is_dir($outputPath)) {
-            $this->deleteDir($outputPath);
+        if (true === is_dir($folderPath)) {
+            $this->deleteDir($folderPath);
         }
 
-        mkdir($outputPath,0777);
+        mkdir($folderPath,0777);
     }
 
     /**
-     * @param string $dirPath
+     * @param string $folderPath
      *
      * @return void
      */
-    protected function deleteDir(string $dirPath): void
+    public function deleteDir(string $folderPath): void
     {
-        if (false === is_dir($dirPath)) {
-            throw new InvalidArgumentException("$dirPath must be a directory.");
+        if (false === is_dir($folderPath)) {
+            throw new InvalidArgumentException("$folderPath must be a directory.");
         }
 
-        if (false === $this->hasTrailingSlash($dirPath)) {
-            $dirPath .= '/';
+        if (false === $this->hasTrailingSlash($folderPath)) {
+            $folderPath .= '/';
         }
 
-        $files = glob($dirPath . '*', GLOB_MARK);
+        $files = glob($folderPath . '*', GLOB_MARK);
 
         foreach ($files as $file) {
             if (is_dir($file)) {
@@ -111,7 +60,8 @@ class FileHandler implements FileHandlerInterface
                 unlink($file);
             }
         }
-        rmdir($dirPath);
+
+        rmdir($folderPath);
     }
 
     /**
@@ -119,8 +69,39 @@ class FileHandler implements FileHandlerInterface
      *
      * @return bool
      */
-    protected function hasTrailingSlash(string $path): bool
+    public function hasTrailingSlash(string $path): bool
     {
         return substr($path, -1) === '/';
+    }
+
+    /**
+     * @param string $pathToFile
+     *
+     * @return array
+     */
+    public function readFromFileAsArray(string $pathToFile): array
+    {
+        return file($pathToFile);
+    }
+
+    /**
+     * @param string $pathToFile
+     *
+     * @return string
+     */
+    public function readFromFileAsString(string $pathToFile): string
+    {
+        return file_get_contents($pathToFile);
+    }
+
+    /**
+     * @param string $pathToFile
+     * @param string $data
+     *
+     * @return void
+     */
+    public function writeOutToFile(string $pathToFile, string $data): void
+    {
+        file_put_contents($pathToFile, $data);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace LocalizationDataBuilder\Business;
 
-interface MasterProcessorInterface
+interface LocaleMasterProcessorInterface
 {
     /**
      * @return array

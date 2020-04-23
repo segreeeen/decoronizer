@@ -37,15 +37,26 @@ class Application
         $replacementDataProcessor = $this
             ->localizationDataBuilderBusinessFactory
             ->createReplacementDataProcessor();
-        $replacementDataForLocales = $replacementDataProcessor
+        $replacementDataTransfer = $replacementDataProcessor
             ->composeReplacementDataForLocales($localeMaster);
 
         $pageRenderer->renderSeparatorLine();
 
-        $fileHandler = $this
+        $messageMasterProcessor = $this
             ->localizationDataBuilderBusinessFactory
-            ->createFileHandler();
-        $fileHandler->writeOutFiles($replacementDataForLocales);
+            ->createMessageMasterProcessor();
+        $messageMaster = $messageMasterProcessor
+            ->processMessageMaster(
+                $replacementDataTransfer
+            );
+
+        $dataWriter = $this
+            ->localizationDataBuilderBusinessFactory
+            ->createDataWriter();
+        $dataWriter->writeOutData(
+            $replacementDataTransfer,
+            $messageMaster
+        );
 
         $pageRenderer->renderFoot();
     }

@@ -26,7 +26,7 @@ class LocalizationDataBuilderBusinessFactory
     protected $pageRenderer;
 
     /**
-     * @param PageRenderer $pageRenderer
+     * @param \LocalizationDataBuilder\Communication\PageRenderer $pageRenderer
      */
     public function providePageRenderer(PageRenderer $pageRenderer): void
     {
@@ -50,11 +50,7 @@ class LocalizationDataBuilderBusinessFactory
      */
     public function createFileHandler(): FileHandlerInterface
     {
-        return new FileHandler(
-            $this->getConfig(),
-            $this->createJsonHelper(),
-            $this->pageRenderer
-        );
+        return new FileHandler();
     }
 
     /**
@@ -66,12 +62,13 @@ class LocalizationDataBuilderBusinessFactory
     }
 
     /**
-     * @return \LocalizationDataBuilder\Business\MasterProcessorInterface
+     * @return \LocalizationDataBuilder\Business\LocaleMasterProcessorInterface
      */
-    public function createMasterProcessor(): MasterProcessorInterface
+    public function createMasterProcessor(): LocaleMasterProcessorInterface
     {
-        return new MasterProcessor(
-            $this->getConfig()
+        return new LocaleMasterProcessor(
+            $this->getConfig(),
+            $this->createFileHandler()
         );
     }
 
@@ -82,6 +79,31 @@ class LocalizationDataBuilderBusinessFactory
     {
         return new ReplacementDataProcessor(
             $this->getConfig(),
+            $this->createFileHandler(),
+            $this->pageRenderer
+        );
+    }
+
+    /**
+     * @return \LocalizationDataBuilder\Business\MessageMasterProcessorInterface
+     */
+    public function createMessageMasterProcessor(): MessageMasterProcessorInterface
+    {
+        return new MessageMasterProcessor(
+            $this->getConfig(),
+            $this->createFileHandler()
+        );
+    }
+
+    /**
+     * @return \LocalizationDataBuilder\Business\DataWriterInterface
+     */
+    public function createDataWriter(): DataWriterInterface
+    {
+        return new DataWriter(
+            $this->getConfig(),
+            $this->createFileHandler(),
+            $this->createJsonHelper(),
             $this->pageRenderer
         );
     }

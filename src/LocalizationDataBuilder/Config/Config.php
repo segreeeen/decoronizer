@@ -39,25 +39,25 @@ class Config
     /**
      * @return string
      */
-    public function getSourceCsvPath(): string
+    public function getFilenameSourceCsv(): string
     {
-        return $this->config[ConfigConstants::PATH_SOURCE_CSV];
+        return $this->config[ConfigConstants::FILENAME_SOURCE_CSV];
     }
 
     /**
      * @return string
      */
-    public function getMsgMasterPath(): string
+    public function getFilenameMsgMaster(): string
     {
-        return $this->config[ConfigConstants::PATH_MSG_MASTER];
+        return $this->config[ConfigConstants::FILENAME_MSG_MASTER];
     }
 
     /**
      * @return string
      */
-    public function getMsgDestinationPath(): string
+    public function getFilenameMsgDestination(): string
     {
-        return $this->config[ConfigConstants::PATH_MSG_DESTINATION];
+        return $this->config[ConfigConstants::FILENAME_MSG_DESTINATION];
     }
 
     /**
@@ -90,5 +90,13 @@ class Config
     public function isVerbose(): bool
     {
         return $this->config[ConfigConstants::VERBOSE_MODE];
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDryRun(): bool
+    {
+        return $this->config[ConfigConstants::DRY_RUN];
     }
 }
